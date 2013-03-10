@@ -28,14 +28,14 @@
  * File: TextElement.java
  * Type: TextElement
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
 import java.awt.Graphics;
+import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TextElement.
  */
@@ -50,8 +50,11 @@ public abstract class TextElement extends GUIElement {
 	 * @param text
 	 *            the text
 	 */
-	public TextElement(String text){
+	public TextElement(String text, int x, int y){
 		this.text = text;
+		this.isVisible = true;
+		this.x = x;
+		this.y = y;
 	}
 	
 	/**
@@ -78,5 +81,10 @@ public abstract class TextElement extends GUIElement {
 	 */
 	@Override
 	public abstract void draw(Graphics g);
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		
+	}
 
 }

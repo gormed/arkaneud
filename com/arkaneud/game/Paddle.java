@@ -28,7 +28,7 @@
  * File: Paddle.java
  * Type: Paddle
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -42,10 +42,10 @@ import java.awt.geom.Rectangle2D;
 public class Paddle extends Entity {
 	
 	/** The Constant PADDLE_HEIGHT. */
-	public static final int PADDLE_HEIGHT = 7;
+	public static final int PADDLE_HEIGHT = 10;
 	
 	/** The Constant PADDLE_WIDTH. */
-	public static final int PADDLE_WIDTH = 50;
+	public static final int PADDLE_WIDTH = 65;
 
 	/** The moved. */
 	boolean moved = false;
@@ -54,7 +54,7 @@ public class Paddle extends Entity {
 	int direction = 0;
 
 	/** The velocity. */
-	float velocity = 0.001f;
+	float velocity = 500f;
 	
 	/**
 	 * Instantiates a new paddle.
@@ -72,12 +72,12 @@ public class Paddle extends Entity {
 	 * @see com.arkaneud.game.Entity#update()
 	 */
 	@Override
-	public void update(long gap) {
+	public void update(float gap) {
 		if (Level.getInstance().isOver())
 			return;
 
 		if (moved) {
-			xPos += (velocity * direction);
+			xPos += (velocity * direction) * gap;
 			createCollision();
 		} else
 			return;
@@ -104,6 +104,7 @@ public class Paddle extends Entity {
 			return;
 		}
 		moved = false;
+		direction = 0;
 	}
 
 	/* (non-Javadoc)
@@ -112,8 +113,8 @@ public class Paddle extends Entity {
 	@Override
 	public void createCollision() {
 
-		collision = new Rectangle2D.Float(xPos, yPos, PADDLE_WIDTH,
-				PADDLE_HEIGHT);
+		collision = new Rectangle2D.Float(xPos, yPos, width,
+				height);
 	}
 
 

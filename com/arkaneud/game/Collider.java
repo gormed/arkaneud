@@ -28,7 +28,7 @@
  * File: Collider.java
  * Type: Collider
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -246,14 +246,15 @@ public class Collider {
 		 *            the collisions
 		 */
 		public void validateCollisions(ArrayList<CollisionResult> collisions) {
-			ArrayList<CollisionResult> temp = new ArrayList<Collider.RayCaster.CollisionResult>(
-					collisions);
-			for (int i = 0; i < collisions.size(); i++) {
-				CollisionResult c = collisions.get(i);
+			ArrayList<CollisionResult> temp = new ArrayList<CollisionResult>();
+			for (CollisionResult c : collisions) {
 				if (c != null) {
 					if (!c.isValid())
-						collisions.remove(i);
+						temp.add(c);
 				}
+			}
+			for (CollisionResult c : temp) {
+				collisions.remove(c);
 			}
 			collisions.trimToSize();
 		}
@@ -319,7 +320,7 @@ public class Collider {
 				// get interpolation param on ray (smaller is closer to origin
 				// of the ray)
 				float s = ray.getParameter(point);
-				// caclulate the normal of the side which was hit
+				// Calculate the normal of the side which was hit
 				normal.x = -sideRay.dir.y;
 				normal.y = sideRay.dir.x;
 				// only valid between start and end point

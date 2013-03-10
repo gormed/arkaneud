@@ -28,7 +28,7 @@
  * File: GameWindow.java
  * Type: GameWindow
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -83,6 +83,9 @@ public class GameWindow extends JFrame {
 
 	/** The game buffer. */
 	private GameBuffer gameBuffer;
+	
+	/** The active. */
+	private boolean active = false;
 
 	/**
 	 * Instantiates a new game window.
@@ -120,6 +123,8 @@ public class GameWindow extends JFrame {
 				synchronized (gameKeyListener) {
 					// loop endless until exit request
 					while (!gameKeyListener.exit) {
+						if (!active)
+							updateTime = System.currentTimeMillis();
 						// get current time
 						time = System.currentTimeMillis();
 						gap = time - updateTime;
@@ -129,7 +134,7 @@ public class GameWindow extends JFrame {
 								.move(gameKeyListener.left,
 										gameKeyListener.right);
 						// update level elements
-						level.update(gap);
+						level.update((float) (((double) gap) * 0.001));
 						if ((time - drawTime) > 16) {
 							// draw synchronized all 16 ms
 							drawTime = time;
@@ -156,19 +161,22 @@ public class GameWindow extends JFrame {
 			addElement(new BallElement(), b);
 		}
 
-		addElement(new TextElement("Lives: ") {
-
-			@Override
-			public void update(Observable o, Object arg) {
-				// TODO Auto-generated method stub
-
-			}
-
+		addElement(new TextElement("Lives: ", 50, Level.LEVEL_HEIGHT - 50) {
 			@Override
 			public void draw(Graphics g) {
 				if (isVisible) {
 					g.drawString(this.getText() + " "
 							+ level.getLocalPlayer().getLives(), x, y);
+				}
+			}
+		}, null);
+		
+		addElement(new TextElement("Points: ", Level.LEVEL_WIDTH - 100, Level.LEVEL_HEIGHT - 50) {
+			@Override
+			public void draw(Graphics g) {
+				if (isVisible) {
+					g.drawString(this.getText() + " "
+							+ level.getLocalPlayer().getPoints(), x, y);
 				}
 			}
 		}, null);
@@ -375,7 +383,7 @@ public class GameWindow extends JFrame {
 		 */
 		@Override
 		public void windowActivated(WindowEvent e) {
-
+			active = true;
 		}
 
 		/*
@@ -386,7 +394,7 @@ public class GameWindow extends JFrame {
 		 */
 		@Override
 		public void windowDeactivated(WindowEvent e) {
-
+			active = false;
 		}
 
 	}

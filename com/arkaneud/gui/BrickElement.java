@@ -28,7 +28,7 @@
  * File: BrickElement.java
  * Type: BrickElement
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -58,7 +58,8 @@ public class BrickElement extends LevelElement {
 	@Override
 	public void draw(Graphics g) {
 		if (isVisible)
-			g.drawRect(x, y, Brick.BRICK_WIDTH, Brick.BRICK_HEIGHT);
+			g.drawRect(x - width/2, y - height/2, width,
+					height);
 	}
 
 	/*
@@ -73,6 +74,8 @@ public class BrickElement extends LevelElement {
 			Brick b = (Brick) o;
 			x = (int) b.getXPos();
 			y = (int) b.getYPos();
+			width = (int) b.getWidth();
+			height = (int) b.getHeight();
 			setVisible(!b.wasHit());
 		}
 	}

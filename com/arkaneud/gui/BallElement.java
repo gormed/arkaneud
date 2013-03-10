@@ -28,7 +28,7 @@
  * File: BallElement.java
  * Type: BallElement
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -60,7 +60,7 @@ public class BallElement extends LevelElement {
 	@Override
 	public void draw(Graphics g) {
 		if (isVisible()) {
-			g.drawOval(x, y, radius, radius);
+			g.drawOval(x - radius, y - radius, width, height);
 		}
 	}
 
@@ -72,13 +72,15 @@ public class BallElement extends LevelElement {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		Long gap = (Long) arg;
+		float gap = (Float) arg;
 		if (o instanceof Ball) {
 			Ball b = (Ball) o;
 			x = (int) b.getXPos();
 			y = (int) b.getYPos();
 			isVisible = b.isActive();
 			radius = b.getRadius();
+			width = radius*2;
+			height = radius*2;
 		}
 	}
 

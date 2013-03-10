@@ -28,7 +28,7 @@
  * File: Updateable.java
  * Type: Updateable
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -45,7 +45,7 @@ public interface Updateable {
 	 * @param gap
 	 *            the gap
 	 */
-	public void update(long gap);
+	public void update(float gap);
 	
 	/**
 	 * Update observers.
@@ -53,5 +53,5 @@ public interface Updateable {
 	 * @param gap
 	 *            the gap
 	 */
-	public void updateObservers(long gap);
+	public void updateObservers(float gap);
 }

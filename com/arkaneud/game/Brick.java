@@ -28,7 +28,7 @@
  * File: Brick.java
  * Type: Brick
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -45,17 +45,18 @@ public class Brick extends Entity {
 
 	/** The Constant BRICK_HEIGHT. */
 	public static final int BRICK_HEIGHT = 20;
-	
+
 	/** The Constant BRICK_WIDTH. */
 	public static final int BRICK_WIDTH = 50;
-	
+
 	/** The was hit. */
 	boolean wasHit = false;
-	
+
 	/** The color. */
 	Color color;
 
-	
+	int points = 1;
+
 	/**
 	 * Instantiates a new brick.
 	 * 
@@ -66,7 +67,7 @@ public class Brick extends Entity {
 	 * @param color
 	 *            the color
 	 */
-	public Brick(float x, float y, Color color){
+	public Brick(float x, float y, Color color) {
 		xPos = x;
 		yPos = y;
 		width = BRICK_WIDTH;
@@ -74,46 +75,55 @@ public class Brick extends Entity {
 		this.color = color;
 		createCollision();
 	}
-	
+
 	/**
 	 * Instantiates a new brick.
 	 * 
 	 * @param data
 	 *            the data
 	 */
-	public Brick(BrickData data){
+	public Brick(BrickData data) {
 		xPos = data.x;
 		yPos = data.y;
+		width = BRICK_WIDTH;
+		height = BRICK_HEIGHT;
 		this.color = data.color;
 		createCollision();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.arkaneud.game.Entity#update()
 	 */
 	@Override
-	public void update(long gap) {
+	public void update(float gap) {
 		if (Level.getInstance().isOver() || wasHit)
 			return;
-//		Ball b = Level.getInstance().getLocalPlayer().getBallsList().get(0);
-//		collide(b);
+		// Ball b = Level.getInstance().getLocalPlayer().getBallsList().get(0);
+		// collide(b);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.arkaneud.game.Entity#createCollision()
 	 */
 	@Override
 	public void createCollision() {
-		collision = new Rectangle2D.Float(xPos, yPos, BRICK_WIDTH, BRICK_HEIGHT);
+		collision = new Rectangle2D.Float(xPos, yPos, width, height);
 	}
 
 	/**
 	 * Sets the hit.
 	 */
 	void setHit() {
+		if (wasHit)
+			return;
+		Level.getInstance().getLocalPlayer().addPoints(points);
 		wasHit = true;
 	}
-	
+
 	/**
 	 * Was hit.
 	 * 
@@ -122,4 +132,5 @@ public class Brick extends Entity {
 	public boolean wasHit() {
 		return wasHit;
 	}
+
 }

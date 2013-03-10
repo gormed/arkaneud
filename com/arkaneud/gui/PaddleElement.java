@@ -28,7 +28,7 @@
  * File: PaddleElement.java
  * Type: PaddleElement
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -42,7 +42,6 @@ import com.arkaneud.game.Paddle;
  * The Class PaddleElement.
  */
 public class PaddleElement extends LevelElement {
-
 
 	/**
 	 * Instantiates a new paddle element.
@@ -58,7 +57,7 @@ public class PaddleElement extends LevelElement {
 	@Override
 	public void draw(Graphics g) {
 
-		g.drawRect(x, y, Paddle.PADDLE_WIDTH, Paddle.PADDLE_HEIGHT);
+		g.drawRect(x - width / 2, y - height / 2, width, height);
 	}
 
 	/*
@@ -73,6 +72,8 @@ public class PaddleElement extends LevelElement {
 			Paddle p = (Paddle) o;
 			x = (int) p.getXPos();
 			y = (int) p.getYPos();
+			width = (int) p.getWidth();
+			height = (int) p.getHeight();
 		}
 	}
 }

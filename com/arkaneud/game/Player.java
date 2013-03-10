@@ -28,7 +28,7 @@
  * File: Player.java
  * Type: Player
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -91,7 +91,7 @@ public class Player extends Observable implements Updateable {
 	 * @see com.arkaneud.game.Updateable#update(long)
 	 */
 	@Override
-	public void update(long gap) {
+	public void update(float gap) {
 		if (hasWon || hasLost)
 			return;
 
@@ -100,6 +100,7 @@ public class Player extends Observable implements Updateable {
 			hasWon = true;
 		} else {
 			if (ballsList.get(0).isLost()) {
+				lives--;
 				ballsList.remove(0);
 				ballsList.trimToSize();
 				if (ballsList.isEmpty()) {
@@ -119,7 +120,7 @@ public class Player extends Observable implements Updateable {
 	 * @see com.arkaneud.game.Updateable#updateObservers(long)
 	 */
 	@Override
-	public void updateObservers(long gap) {
+	public void updateObservers(float gap) {
 		update(gap);
 		setChanged();
 		notifyObservers(gap);
@@ -197,4 +198,8 @@ public class Player extends Observable implements Updateable {
 		return level;
 	}
 
+	void addPoints(int points) {
+		this.points += points;
+	}
+	
 }
