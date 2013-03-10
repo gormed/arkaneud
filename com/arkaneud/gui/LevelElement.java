@@ -28,7 +28,7 @@
  * File: LevelElement.java
  * Type: LevelElement
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -41,6 +41,12 @@ package com.arkaneud.gui;
 public abstract class LevelElement extends GUIElement {
 
 	//public 
+	
+	/** The width. */
+	int width;
+	
+	/** The height. */
+	int height;
 	
 	/**
 	 * Instantiates a new level element.

@@ -28,7 +28,7 @@
  * File: Level.java
  * Type: Level
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -36,9 +36,6 @@ package com.arkaneud.game;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import sun.security.jca.GetInstance.Instance;
-
-import com.arkaneud.gui.*;
 import com.arkaneud.data.*;
 
 // TODO: Auto-generated Javadoc
@@ -154,7 +151,7 @@ public class Level extends Observable implements Updateable {
 	 * @see com.arkaneud.game.Updateable#update(long)
 	 */
 	@Override
-	public void update(long gap) {
+	public void update(float gap) {
 		localPlayer.updateObservers(gap);
 		if (localPlayer.hasLost())
 			isOver = true;
@@ -167,7 +164,7 @@ public class Level extends Observable implements Updateable {
 	 * @see com.arkaneud.game.Updateable#updateObservers(long)
 	 */
 	@Override
-	public void updateObservers(long gap) {
+	public void updateObservers(float gap) {
 		update(gap);
 		setChanged();
 		notifyObservers(gap);

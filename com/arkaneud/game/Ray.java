@@ -28,13 +28,12 @@
  * File: Ray.java
  * Type: Ray
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 
 /**
  * The Class Ray.

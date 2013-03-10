@@ -28,7 +28,7 @@
  * File: Ball.java
  * Type: Ball
  *
- * Documentation created: 09.03.2013 - 17:26:30 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -36,8 +36,6 @@ package com.arkaneud.game;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import com.arkaneud.game.Collider.RayCaster;
 import com.arkaneud.game.Collider.RayCaster.CollisionResult;
 
@@ -48,7 +46,7 @@ import com.arkaneud.game.Collider.RayCaster.CollisionResult;
 public class Ball extends Entity {
 
 	/** The Constant BALL_RADIUS. */
-	public static final int BALL_RADIUS = 20;
+	public static final int BALL_RADIUS = 6;
 
 	/** The is active. */
 	private boolean isActive = false;
@@ -58,7 +56,7 @@ public class Ball extends Entity {
 
 	/** The velocity y. */
 	private float velocityX, velocityY;
-	
+
 	/** The accuracy. */
 	private float accuracy = 0.9f;
 
@@ -71,8 +69,8 @@ public class Ball extends Entity {
 	public Ball() {
 		xPos = 200;
 		yPos = 200;
-		velocityX = (float) (0.5f * (Math.random() - 0.5));
-		velocityY = (float) (0.5f * Math.random());
+		velocityX = (float) (200.0f * (Math.random() - 0.5));
+		velocityY = (float) (500.0f * Math.random());
 		createCollision();
 	}
 
@@ -108,7 +106,7 @@ public class Ball extends Entity {
 	 * @see com.arkaneud.game.Entity#update()
 	 */
 	@Override
-	public void update(long gap) {
+	public void update(float gap) {
 		if (isLost || !isActive)
 			return;
 		if (yPos < BALL_RADIUS) {
@@ -116,49 +114,51 @@ public class Ball extends Entity {
 			return;
 		}
 
-		createCollision();
 		Collider col = Collider.getInstance();
 		RayCaster caster = RayCaster.getInstance();
 
 		Ray ballRay = new Ray(new Point2D.Float(xPos, yPos), new Point2D.Float(
-				xPos + velocityX * gap, yPos + velocityY * gap));
+				xPos + velocityX * 0.1f, yPos + velocityY * 0.1f));
 
 		if (collideWithLevel() != 0) {
-		} else if (this.collision.intersects(Level.getInstance().getLocalPlayer()
-				.getPaddle().collision)) {
-			ArrayList<CollisionResult> results = caster.intersectRay(ballRay,
-					Level.getInstance().getLocalPlayer().getPaddle().collision);
-			caster.sortByDistance(results);
-			caster.validateCollisions(results);
-			if (!results.isEmpty()) {
-				CollisionResult first = results.get(0);
-				if (first.isValid()) {
+		} else if (col.intersects(this, Level.getInstance().getLocalPlayer()
+				.getPaddle())) {
+			collideWithPaddle(caster, ballRay);
+		} else if (true) {
+			collideWithBricks(col, caster, ballRay);
+		}
+		xPos += velocityX * gap;
+		yPos += velocityY * gap;
+		createCollision();
+	}
+
+	/**
+	 * Collide with bricks.
+	 * 
+	 * @param col
+	 *            the col
+	 * @param caster
+	 *            the caster
+	 * @param ballRay
+	 *            the ball ray
+	 */
+	private void collideWithBricks(Collider col, RayCaster caster, Ray ballRay) {
+		ArrayList<Brick> copy = Level.getInstance().getBricksList();
+		ArrayList<Brick> temp = new ArrayList<Brick>(Level.getInstance()
+				.getBricksList());
+		for (Brick b : temp) {
+			if (!b.wasHit && col.intersects(this, b)) {
+
+				ArrayList<CollisionResult> results = caster.intersectRay(
+						ballRay, b.collision);
+				caster.validateCollisions(results);
+				caster.sortByDistance(results);
+				if (!results.isEmpty()) {
+					CollisionResult first = results.get(0);
 					if (first.collisionNormal.x == 0) {
 						velocityY *= -1.f;
 					} else if (first.collisionNormal.y == 0) {
 						velocityX *= -1.f;
-					}
-				}
-			}
-		} else if (true) {
-			ArrayList<Brick> copy = Level.getInstance().getBricksList();
-			ArrayList<Brick> temp = new ArrayList<Brick>(Level.getInstance().getBricksList());
-			for (Brick b : temp) {
-				if (!b.wasHit && this.collision.intersects(b.collision)) {
-
-					ArrayList<CollisionResult> results = caster.intersectRay(
-							ballRay, b.collision);
-					caster.sortByDistance(results);
-					caster.validateCollisions(results);
-					if (!results.isEmpty()) {
-						CollisionResult first = results.get(0);
-						if (first.isValid()) {
-							if (first.collisionNormal.x == 0) {
-								velocityY *= -1.f;
-							} else if (first.collisionNormal.y == 0) {
-								velocityX *= -1.f;
-							}
-						}
 					}
 					b.setHit();
 					copy.remove(b);
@@ -166,9 +166,32 @@ public class Ball extends Entity {
 				}
 			}
 		}
-		xPos += velocityX * gap;
-		yPos += velocityY * gap;
+	}
 
+	/**
+	 * Collide with paddle.
+	 * 
+	 * @param caster
+	 *            the caster
+	 * @param ballRay
+	 *            the ball ray
+	 */
+	private void collideWithPaddle(RayCaster caster, Ray ballRay) {
+		Paddle p = Level.getInstance().getLocalPlayer().getPaddle();
+		ArrayList<CollisionResult> results = caster.intersectRay(ballRay,
+				p.collision);
+		caster.validateCollisions(results);
+		caster.sortByDistance(results);
+		if (!results.isEmpty()) {
+			CollisionResult first = results.get(0);
+
+			if (first.collisionNormal.x == 0) {
+				velocityY *= -1.f;
+			} else if (first.collisionNormal.y == 0) {
+				velocityX += (p.velocity * p.direction) * 0.25f;
+				velocityX *= -1.f;
+			}
+		}
 	}
 
 	/**
@@ -178,13 +201,15 @@ public class Ball extends Entity {
 	 */
 	private int collideWithLevel() {
 		int sth = 0;
-		if (xPos - width * 0.5f - accuracy < 0
-				|| xPos + width * 0.5f + accuracy > Level.LEVEL_WIDTH
-						- BALL_RADIUS) {
+		float x,y;
+		x = xPos + velocityX * 0.01f;
+		y = yPos + velocityY * 0.01f;
+		if (x - radius < 0
+				|| x + radius > Level.LEVEL_WIDTH) {
 			velocityX *= -1f;
 			sth = 1;
 		}
-		if (yPos - accuracy > Level.LEVEL_HEIGHT) {
+		if (y + radius > Level.LEVEL_HEIGHT) {
 			velocityY *= -1f;
 			sth = 1;
 		}
@@ -201,12 +226,14 @@ public class Ball extends Entity {
 		isActive = active;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.arkaneud.game.Entity#createCollision()
 	 */
 	@Override
 	public void createCollision() {
-		collision = new Rectangle2D.Float(xPos, yPos, BALL_RADIUS, BALL_RADIUS);
+		collision = new Rectangle2D.Float(xPos, yPos, width, height);
 	}
 
 	// @Override

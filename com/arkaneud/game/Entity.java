@@ -28,7 +28,7 @@
  * File: Entity.java
  * Type: Entity
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -97,7 +97,7 @@ public abstract class Entity extends Observable implements Updateable {
 	 * @param gap
 	 *            the gap
 	 */
-	void updateObsersers(long gap) {
+	void updateObsersers(float gap) {
 		update(gap);
 		setChanged();
 		notifyObservers(gap);
@@ -109,7 +109,7 @@ public abstract class Entity extends Observable implements Updateable {
 	 * @see com.arkaneud.game.Updateable#update(long)
 	 */
 	@Override
-	public abstract void update(long gap);
+	public abstract void update(float gap);
 
 	/*
 	 * (non-Javadoc)
@@ -117,7 +117,7 @@ public abstract class Entity extends Observable implements Updateable {
 	 * @see com.arkaneud.game.Updateable#updateObservers(long)
 	 */
 	@Override
-	public void updateObservers(long gap) {
+	public void updateObservers(float gap) {
 		update(gap);
 		setChanged();
 		notifyObservers(gap);
@@ -129,7 +129,7 @@ public abstract class Entity extends Observable implements Updateable {
 	 * @return the x pos
 	 */
 	public float getXPos() {
-		return xPos - width * 0.5f;
+		return xPos;
 	}
 
 	/**
@@ -138,6 +138,26 @@ public abstract class Entity extends Observable implements Updateable {
 	 * @return the y pos
 	 */
 	public float getYPos() {
-		return (Level.LEVEL_HEIGHT - (yPos - height * 0.5f));
+		return Level.LEVEL_HEIGHT - yPos;
 	}
+
+	/**
+	 * Gets the width.
+	 * 
+	 * @return the width
+	 */
+	public float getWidth() {
+		return width;
+	}
+
+	/**
+	 * Gets the height.
+	 * 
+	 * @return the height
+	 */
+	public float getHeight() {
+		return height;
+	}
+	
+	
 }

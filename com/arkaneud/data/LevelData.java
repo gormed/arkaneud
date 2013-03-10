@@ -28,7 +28,7 @@
  * File: LevelData.java
  * Type: LevelData
  *
- * Documentation created: 09.03.2013 - 17:26:29 by Hans Ferchland
+ * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.data;
@@ -86,7 +86,7 @@ public class LevelData {
 	 */
 	private void createDataset() {
 		brickData = new ArrayList<LevelData.BrickData>();
-		for (float x = 0.8f; x < 5; x++) {
+		for (float x = 0.8f; x < 6; x++) {
 			for (float y = 19; y > 13; y--) {
 				brickData.add(new BrickData(x * 60, y * 30, Color.GREEN));				
 			}
