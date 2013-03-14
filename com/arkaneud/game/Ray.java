@@ -67,10 +67,14 @@ public class Ray {
 	 *            the end
 	 */
 	public Ray(Point2D.Float start, Point2D.Float end) {
+		// calc the dir of the ray
 		this.dir = new Point2D.Float(end.x - start.x, end.y - start.y);
+		// set start and end point
 		this.startPoint = start;
 		this.endPoint = end;
+		// if start and end isnt equal
 		if (end.x != start.x) {
+			// calculate the m-value
 			m = (end.y - start.y) / (end.x - start.x);
 			if (m != 0)
 				n = start.y - m * start.x;

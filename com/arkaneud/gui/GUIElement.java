@@ -71,14 +71,14 @@ public abstract class GUIElement implements Observer {
 	 * @param name
 	 *            the name
 	 */
-	public GUIElement(String name){
+	public GUIElement(String name) {
 		this.name = name;
 	}
 	
 	/**
 	 * Instantiates a new gUI element.
 	 */
-	public GUIElement(){
+	public GUIElement() {
 		name = name + "_" + id;
 	}
 

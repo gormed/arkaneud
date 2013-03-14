@@ -58,7 +58,7 @@ public class Ball extends Entity {
 	private float velocityX, velocityY;
 
 	/** The accuracy. */
-	private float accuracy = 0.9f;
+	//private float accuracy = 0.9f;
 
 	/** The radius. */
 	float radius = BALL_RADIUS;
@@ -70,7 +70,7 @@ public class Ball extends Entity {
 		xPos = 200;
 		yPos = 200;
 		velocityX = (float) (200.0f * (Math.random() - 0.5));
-		velocityY = (float) (500.0f * Math.random());
+		velocityY = (float) (320.0f);
 		createCollision();
 	}
 

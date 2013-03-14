@@ -102,8 +102,11 @@ public class Level extends Observable implements Updateable {
 		levelData = data;
 		bricksList = getBricksFromData();
 		brickCount = bricksList.size();
+		/*
 		com.sun.security.auth.module.NTSystem NTSystem = new com.sun.security.auth.module.NTSystem();
 		localPlayer = new Player(System.getProperty(NTSystem.getName()), this);
+		*/
+		localPlayer = new Player("local", this);
 		
 		isInistialized = true;
 	}

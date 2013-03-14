@@ -72,7 +72,7 @@ public class BallElement extends LevelElement {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		float gap = (Float) arg;
+		//float gap = (Float) arg;
 		if (o instanceof Ball) {
 			Ball b = (Ball) o;
 			x = (int) b.getXPos();
