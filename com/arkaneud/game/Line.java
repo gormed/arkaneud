@@ -36,15 +36,15 @@ package com.arkaneud.game;
 import java.awt.geom.Point2D;
 
 /**
- * The Class Line.
+ * The Class Line defines a simple 2D line.
  */
 public class Line {
 	
 	/** The start. */
-	Point2D.Float start = new Point2D.Float();
+	Point2D.Float start;
 	
 	/** The end. */
-	Point2D.Float end = new Point2D.Float();
+	Point2D.Float end;
 
 	/**
 	 * Instantiates a new line.
@@ -60,16 +60,16 @@ public class Line {
 	}
 
 	/**
-	 * Gets the line.
+	 * Gets the line as a vector.
 	 * 
 	 * @return the line
 	 */
-	public Point2D.Float getLine() {
+	public Point2D.Float getVector() {
 		return new Point2D.Float(end.x - start.x, end.y - start.y);
 	}
 
 	/**
-	 * Gets the ray.
+	 * Gets the line as a ray.
 	 * 
 	 * @return the ray
 	 */

@@ -33,25 +33,24 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface Updateable.
+ * The Interface Updateable defines general update process methods.
  */
 public interface Updateable {
 	
 	/**
-	 * Update.
+	 * Updates the object itself.
 	 * 
 	 * @param gap
-	 *            the gap
+	 *            the gap between the last update call, the delta of time
 	 */
 	public void update(float gap);
 	
 	/**
-	 * Update observers.
+	 * Updates the observers of the object by sending the notifications.
 	 * 
 	 * @param gap
-	 *            the gap
+	 *            the gap between the last update call, the delta of time
 	 */
 	public void updateObservers(float gap);
 }

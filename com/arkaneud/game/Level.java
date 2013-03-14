@@ -38,31 +38,28 @@ import java.util.Observable;
 
 import com.arkaneud.data.*;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Level.
+ * The Class Level discribes the levels content and holds the player object.
+ * This class is a singleton!
  */
 public class Level extends Observable implements Updateable {
 
 	/** The Constant LEVEL_HEIGHT. */
 	public static final int LEVEL_HEIGHT = 600;
-	
+
 	/** The Constant LEVEL_WIDTH. */
 	public static final int LEVEL_WIDTH = 400;
-	
+
 	/** The instance. */
 	private static Level instance;
-	
+
 	/** The is inistialized. */
 	private static boolean isInistialized = false;
 
-	/** The brick count. */
-	private int brickCount;
-
-	/** The is over. */
+	/** The is over flag, true if the player has won or lost. */
 	private boolean isOver = false;
 
-	/** The level data. */
+	/** The levels data. */
 	private LevelData levelData;
 
 	/** The bricks list. */
@@ -77,7 +74,7 @@ public class Level extends Observable implements Updateable {
 	private Level() {
 
 	}
-	
+
 	/**
 	 * Gets the single instance of Level.
 	 * 
@@ -88,9 +85,9 @@ public class Level extends Observable implements Updateable {
 			return instance;
 		return instance = new Level();
 	}
-	
+
 	/**
-	 * Initialize.
+	 * Initializes the level with the given data.
 	 * 
 	 * @param data
 	 *            the data
@@ -98,31 +95,31 @@ public class Level extends Observable implements Updateable {
 	public void initialize(LevelData data) {
 		if (isInistialized)
 			return;
-		
+
 		levelData = data;
 		bricksList = getBricksFromData();
-		brickCount = bricksList.size();
 		/*
-		com.sun.security.auth.module.NTSystem NTSystem = new com.sun.security.auth.module.NTSystem();
-		localPlayer = new Player(System.getProperty(NTSystem.getName()), this);
-		*/
-		localPlayer = new Player("local", this);
-		
+		 * This code works only on windows/not with the openJDK for linux
+		 * com.sun.security.auth.module.NTSystem NTSystem = new
+		 * com.sun.security.auth.module.NTSystem(); localPlayer = new
+		 * Player(System.getProperty(NTSystem.getName()), this);
+		 */
+		localPlayer = new Player("local");
+
 		isInistialized = true;
 	}
-	
+
 	/**
-	 * Destory.
+	 * Destorys the level instance so it can be reinitialized.
 	 */
 	public void destory() {
 		if (isInistialized)
 			return;
-		
+
 		levelData = null;
 		bricksList.clear();
-		brickCount = 0;
 		localPlayer = null;
-		
+
 		isInistialized = false;
 	}
 
@@ -150,20 +147,24 @@ public class Level extends Observable implements Updateable {
 		return new ArrayList<Brick>(bricksList);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.arkaneud.game.Updateable#update(long)
 	 */
 	@Override
 	public void update(float gap) {
 		localPlayer.updateObservers(gap);
-		if (localPlayer.hasLost())
+		if (localPlayer.hasLost() || localPlayer.hasWon())
 			isOver = true;
 		for (Brick b : bricksList) {
-			b.updateObsersers(gap);
+			b.updateObservers(gap);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.arkaneud.game.Updateable#updateObservers(long)
 	 */
 	@Override
@@ -179,11 +180,11 @@ public class Level extends Observable implements Updateable {
 	 * @return the remaining bricks
 	 */
 	public int getRemainingBricks() {
-		return brickCount;
+		return bricksList.size();
 	}
 
 	/**
-	 * Checks if is over.
+	 * Checks if level is over.
 	 * 
 	 * @return true, if is over
 	 */

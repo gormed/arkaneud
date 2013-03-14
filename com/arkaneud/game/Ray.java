@@ -36,26 +36,27 @@ package com.arkaneud.game;
 import java.awt.geom.Point2D;
 
 /**
- * The Class Ray.
+ * The Class Ray represents a mathmatical 2D ray for the purpose of
+ * ray-rectangle intersection checks.
  */
 public class Ray {
 
-	/** The dir. */
-	Point2D.Float dir = new Point2D.Float();
+	/** The direction vector of the ray. */
+	Point2D.Float direction;
 
-	/** The start point. */
-	Point2D.Float startPoint = new Point2D.Float();
-	
-	/** The end point. */
-	Point2D.Float endPoint = new Point2D.Float();
+	/** The start point of the ray. */
+	Point2D.Float startPoint;
 
-	/** The m. */
+	/** The end point of the ray. */
+	Point2D.Float endPoint;
+
+	/** The slope/gradient of the ray. */
 	float m;
-	
-	/** The n. */
+
+	/** The offset in y-direction of the ray. */
 	float n;
 
-	/** The vertical. */
+	/** The vertical flag if the ray is parallel to the y-axis. */
 	boolean vertical = false;
 
 	/**
@@ -68,19 +69,17 @@ public class Ray {
 	 */
 	public Ray(Point2D.Float start, Point2D.Float end) {
 		// calc the dir of the ray
-		this.dir = new Point2D.Float(end.x - start.x, end.y - start.y);
+		this.direction = new Point2D.Float(end.x - start.x, end.y - start.y);
 		// set start and end point
 		this.startPoint = start;
 		this.endPoint = end;
 		// if start and end isnt equal
 		if (end.x != start.x) {
-			// calculate the m-value
+			// calculate the gradient- and offset-value
 			m = (end.y - start.y) / (end.x - start.x);
-			if (m != 0)
-				n = start.y - m * start.x;
-			else
-				n = endPoint.y;
+			n = start.y - m * start.x;
 		} else {
+			// else the ray is vertical, so we flip x- with y-axis for this
 			m = 0;
 			n = endPoint.x;
 			vertical = true;
@@ -88,7 +87,8 @@ public class Ray {
 	}
 
 	/**
-	 * Gets the value.
+	 * Gets the value, means we calculate f(x) = m*x + n if the ray is not
+	 * vertical, otherwise we calculate g(y) = x.
 	 * 
 	 * @param x
 	 *            the x
@@ -103,28 +103,29 @@ public class Ray {
 	}
 
 	/**
-	 * Normalize.
+	 * Normalizes the direction vector.
 	 */
 	public void normalize() {
-		float l = (float) dir.distance(0, 0);
-		dir.x /= l;
-		dir.y /= l;
+		float l = (float) direction.distance(0, 0);
+		direction.x /= l;
+		direction.y /= l;
 	}
 
 	/**
-	 * Gets the point.
+	 * Gets the point for a t-value [-oo; +oo]. 
+	 * We calculate p(t) = start + t * direction.
 	 * 
 	 * @param t
 	 *            the t
 	 * @return the point
 	 */
 	public Point2D.Float getPoint(float t) {
-		return new Point2D.Float(startPoint.x + t * dir.x, startPoint.y + t
-				* dir.x);
+		return new Point2D.Float(startPoint.x + t * direction.x, startPoint.y
+				+ t * direction.x);
 	}
 
 	/**
-	 * Gets the parameter.
+	 * Gets the parameter 't' of a point on the ray.
 	 * 
 	 * @param point
 	 *            the point
@@ -133,15 +134,15 @@ public class Ray {
 	public float getParameter(Point2D.Float point) {
 		float t1, t2;
 		float epsilon = 0.1f;
-		t1 = (point.x - startPoint.x) / dir.x;
-		t2 = (point.y - startPoint.y) / dir.y;
-		if (dir.x == 0 && dir.y != 0)
+		t1 = (point.x - startPoint.x) / direction.x;
+		t2 = (point.y - startPoint.y) / direction.y;
+		if (direction.x == 0 && direction.y != 0)
 			return t2;
-		if (dir.y == 0 && dir.x != 0)
+		if (direction.y == 0 && direction.x != 0)
 			return t1;
 		if (t1 + epsilon > t2 && t1 - epsilon < t2)
 			return t1;
-		return 0;
+		return Float.NaN;
 
 	}
 }

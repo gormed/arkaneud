@@ -28,7 +28,7 @@
  * File: Player.java
  * Type: Player
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 14.03.2013 - 14:27:14 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -36,52 +36,46 @@ package com.arkaneud.game;
 import java.util.ArrayList;
 import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Player.
  */
 public class Player extends Observable implements Updateable {
 
-	/** The has lost. */
+	/** The has lost flag indicates if the player has lost the game. */
 	private boolean hasLost = false;
 
-	/** The has won. */
+	/** The has won flag indicates if the player has won the game. */
 	private boolean hasWon = false;
 
-	/** The lives. */
+	/** The lives of the player. */
 	private int lives = 3;
 
-	/** The name. */
+	/** The name of the player. */
 	private String name = "Player";
 
-	/** The points. */
+	/** The points of the player. */
 	private int points = 0;
 
-	/** The paddle. */
+	/** The paddle reference. */
 	private Paddle paddle;
 
-	/** The balls list. */
+	/** The balls list the player has remaining. */
 	private ArrayList<Ball> ballsList = new ArrayList<Ball>();
-
-	/** The level. */
-	private Level level;
 
 	/**
 	 * Instantiates a new player.
 	 * 
 	 * @param name
 	 *            the name
-	 * @param level
-	 *            the level
 	 */
-	public Player(String name, Level level) {
+	public Player(String name) {
 		paddle = new Paddle();
 		this.name = name;
-		this.level = level;
 		// add three balls :)
 		ballsList.add(new Ball());
 		ballsList.add(new Ball());
 		ballsList.add(new Ball());
+		// set the first one active
 		ballsList.get(0).setActive(true);
 	}
 
@@ -92,24 +86,32 @@ public class Player extends Observable implements Updateable {
 	 */
 	@Override
 	public void update(float gap) {
+		// dont do anything if the player has lost or won
 		if (hasWon || hasLost)
 			return;
-
-		paddle.updateObsersers(gap);
-		if (level.getRemainingBricks() < 1) {
+		// update the paddle
+		paddle.updateObservers(gap);
+		// check if the player has won
+		if (Level.getInstance().getRemainingBricks() < 1) {
 			hasWon = true;
 		} else {
+			// check if the current ball is lost
 			if (ballsList.get(0).isLost()) {
+				// decrease lives and remove the ball
 				lives--;
 				ballsList.remove(0);
 				ballsList.trimToSize();
+				// check if there are balls remaining
 				if (ballsList.isEmpty()) {
+					// if not the player has lost
 					hasLost = true;
 					return;
-				}
-				ballsList.get(0).setActive(true);
+				} else
+					// otherwise we get a new ball for the player
+					ballsList.get(0).setActive(true);
 			}
-			ballsList.get(0).updateObsersers(gap);
+			// update the current ball
+			ballsList.get(0).updateObservers(gap);
 		}
 
 	}
@@ -189,17 +191,15 @@ public class Player extends Observable implements Updateable {
 		return new ArrayList<Ball>(ballsList);
 	}
 
+	
 	/**
-	 * Gets the level.
+	 * Adds the points recieved for destroying a brick.
 	 * 
-	 * @return the level
+	 * @param points
+	 *            the points
 	 */
-	public Level getLevel() {
-		return level;
-	}
-
 	void addPoints(int points) {
 		this.points += points;
 	}
-	
+
 }

@@ -64,20 +64,22 @@ public class Start {
 	public static void main(String[] args) {
 		GameWindow game = new GameWindow();
 		game.setVisible(true);
-
-		RayCaster rc = RayCaster.getInstance();
-		Ray ray;
-		Float rect;
-		ray = new Ray(new Point2D.Float(0, 2), new Point2D.Float(4, 4));
-		ray.normalize();
-		rect = new Rectangle2D.Float(5, 4.5f, 4, 3);
-		ArrayList<CollisionResult> test = rc.intersectRay(ray, rect);
-		int i = 0;
-		for (CollisionResult c : test) {
-			if (c.isValid())
-				System.out.println(i++ + "] " + c.toString());
-
-		}
+		
+// Ray Caster Testing
+//
+//		RayCaster rc = RayCaster.getInstance();
+//		Ray ray;
+//		Float rect;
+//		ray = new Ray(new Point2D.Float(0, 2), new Point2D.Float(4, 4));
+//		ray.normalize();
+//		rect = new Rectangle2D.Float(5, 4.5f, 4, 3);
+//		ArrayList<CollisionResult> test = rc.intersectRay(ray, rect);
+//		int i = 0;
+//		for (CollisionResult c : test) {
+//			if (c.isValid())
+//				System.out.println(i++ + "] " + c.toString());
+//
+//		}
 	}
 
 }

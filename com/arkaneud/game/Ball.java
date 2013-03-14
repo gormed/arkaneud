@@ -39,26 +39,22 @@ import java.util.ArrayList;
 import com.arkaneud.game.Collider.RayCaster;
 import com.arkaneud.game.Collider.RayCaster.CollisionResult;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Ball.
+ * The Class Ball defines the simulated ball.
  */
 public class Ball extends Entity {
 
 	/** The Constant BALL_RADIUS. */
 	public static final int BALL_RADIUS = 6;
 
-	/** The is active. */
+	/** The flag that defines if the ball is active. */
 	private boolean isActive = false;
 
-	/** The is lost. */
+	/** The flag that defines if the ball is lost. */
 	private boolean isLost = false;
 
-	/** The velocity y. */
+	/** The velocity in x/y direction. */
 	private float velocityX, velocityY;
-
-	/** The accuracy. */
-	//private float accuracy = 0.9f;
 
 	/** The radius. */
 	float radius = BALL_RADIUS;
@@ -67,8 +63,8 @@ public class Ball extends Entity {
 	 * Instantiates a new ball.
 	 */
 	public Ball() {
-		xPos = 200;
-		yPos = 200;
+		position = new Point2D.Float(200, 200);
+		// starting velocity by random x and defined y
 		velocityX = (float) (200.0f * (Math.random() - 0.5));
 		velocityY = (float) (320.0f);
 		createCollision();
@@ -93,7 +89,7 @@ public class Ball extends Entity {
 	}
 
 	/**
-	 * Sets the lost.
+	 * Sets the lost flag internally.
 	 */
 	private void setLost() {
 		isActive = false;
@@ -107,33 +103,40 @@ public class Ball extends Entity {
 	 */
 	@Override
 	public void update(float gap) {
+		// check if the ball itself is lost or not active and cancel updating
 		if (isLost || !isActive)
 			return;
-		if (yPos < BALL_RADIUS) {
+		// if the ball is below zero (out of game) it is lost
+		if (position.y < BALL_RADIUS) {
 			setLost();
 			return;
 		}
-
+		// get instaces of collider and raycaster
 		Collider col = Collider.getInstance();
 		RayCaster caster = RayCaster.getInstance();
-
-		Ray ballRay = new Ray(new Point2D.Float(xPos, yPos), new Point2D.Float(
-				xPos + velocityX * 0.1f, yPos + velocityY * 0.1f));
-
+		// create the balls movement ray from its velocity and current position
+		Ray ballRay = new Ray(position, new Point2D.Float(
+				position.x + velocityX * 0.1f, position.y + velocityY * 0.1f));
+		// collide with the level boundaries
 		if (collideWithLevel() != 0) {
+			// check if the ball itersects the paddle
 		} else if (col.intersects(this, Level.getInstance().getLocalPlayer()
 				.getPaddle())) {
+			// calculate collision parameters with the paddle
 			collideWithPaddle(caster, ballRay);
 		} else if (true) {
+			// checks for each brick if they collide with the ball
 			collideWithBricks(col, caster, ballRay);
 		}
-		xPos += velocityX * gap;
-		yPos += velocityY * gap;
+		// apply the new velocity (set in one of the methods before)
+		position.x += velocityX * gap;
+		position.y += velocityY * gap;
+		// the position changed, so we need to recalculate the collision rect
 		createCollision();
 	}
 
 	/**
-	 * Collide with bricks.
+	 * Collide with all bricks.
 	 * 
 	 * @param col
 	 *            the col
@@ -201,15 +204,18 @@ public class Ball extends Entity {
 	 */
 	private int collideWithLevel() {
 		int sth = 0;
-		float x,y;
-		x = xPos + velocityX * 0.01f;
-		y = yPos + velocityY * 0.01f;
-		if (x - radius < 0
-				|| x + radius > Level.LEVEL_WIDTH) {
+		float x, y;
+		// we need to check if the ball will collide in the future so we travel
+		// some amount of time in the future to check taht
+		x = position.x + velocityX * 0.01f;
+		y = position.y + velocityY * 0.01f;
+		// check for left and right
+		if (x - radius < 0 || x + radius > Level.LEVEL_WIDTH) {
 			velocityX *= -1f;
 			sth = 1;
 		}
-		if (y + radius > Level.LEVEL_HEIGHT) {
+		// check for top
+		else if (y + radius > Level.LEVEL_HEIGHT) {
 			velocityY *= -1f;
 			sth = 1;
 		}
@@ -217,7 +223,7 @@ public class Ball extends Entity {
 	}
 
 	/**
-	 * Sets the active.
+	 * Sets the active flag for the ball (each time the last ball was lost).
 	 * 
 	 * @param active
 	 *            the new active
@@ -233,29 +239,8 @@ public class Ball extends Entity {
 	 */
 	@Override
 	public void createCollision() {
-		collision = new Rectangle2D.Float(xPos, yPos, width, height);
+		collision = new Rectangle2D.Float(position.x, position.y, width, height);
 	}
-
-	// @Override
-	// int collide(Entity entity) {
-	// if (entity instanceof Paddle) {
-	// Paddle paddle = (Paddle) entity;
-	// Ball ball = this;
-	//
-	// if (this.collision.intersects(paddle.getCollision())) {
-	//
-	// }
-	// } else if (entity instanceof Brick) {
-	// Brick brick = (Brick) entity;
-	// Ball ball = this;
-	//
-	// if (this.collision.intersects(brick.getCollision())) {
-	//
-	//
-	// }
-	// }
-	// return 0;
-	// }
 
 	/**
 	 * Gets the radius.

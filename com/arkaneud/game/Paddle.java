@@ -33,6 +33,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 // TODO: Auto-generated Javadoc
@@ -60,7 +61,7 @@ public class Paddle extends Entity {
 	 * Instantiates a new paddle.
 	 */
 	public Paddle() {
-		setPosition(200, 100);
+		position = new Point2D.Float(200, 100);
 		width = PADDLE_WIDTH;
 		height = PADDLE_HEIGHT;
 		createCollision();
@@ -77,7 +78,7 @@ public class Paddle extends Entity {
 			return;
 
 		if (moved) {
-			xPos += (velocity * direction) * gap;
+			position.x += (velocity * direction) * gap;
 			createCollision();
 		} else
 			return;
@@ -113,7 +114,7 @@ public class Paddle extends Entity {
 	@Override
 	public void createCollision() {
 
-		collision = new Rectangle2D.Float(xPos, yPos, width,
+		collision = new Rectangle2D.Float(position.x, position.y, width,
 				height);
 	}
 

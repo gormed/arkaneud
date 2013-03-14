@@ -34,6 +34,7 @@
 package com.arkaneud.game;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import com.arkaneud.data.LevelData.BrickData;
@@ -68,8 +69,7 @@ public class Brick extends Entity {
 	 *            the color
 	 */
 	public Brick(float x, float y, Color color) {
-		xPos = x;
-		yPos = y;
+		position = new Point2D.Float(x, y);
 		width = BRICK_WIDTH;
 		height = BRICK_HEIGHT;
 		this.color = color;
@@ -83,8 +83,7 @@ public class Brick extends Entity {
 	 *            the data
 	 */
 	public Brick(BrickData data) {
-		xPos = data.x;
-		yPos = data.y;
+		position = new Point2D.Float(data.x, data.y);
 		width = BRICK_WIDTH;
 		height = BRICK_HEIGHT;
 		this.color = data.color;
@@ -111,7 +110,7 @@ public class Brick extends Entity {
 	 */
 	@Override
 	public void createCollision() {
-		collision = new Rectangle2D.Float(xPos, yPos, width, height);
+		collision = new Rectangle2D.Float(position.x, position.y, width, height);
 	}
 
 	/**

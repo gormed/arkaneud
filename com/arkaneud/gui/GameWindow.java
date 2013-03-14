@@ -41,8 +41,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
-
 import javax.swing.JFrame;
 
 import com.arkaneud.data.LevelData;
@@ -51,9 +49,8 @@ import com.arkaneud.game.Brick;
 import com.arkaneud.game.Entity;
 import com.arkaneud.game.Level;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GameWindow.
+ * The Class GameWindow is the main game JFrame window of the game.
  */
 public class GameWindow extends JFrame {
 
@@ -66,25 +63,29 @@ public class GameWindow extends JFrame {
 	/** The entity list. */
 	private HashMap<Long, Entity> entityList = new HashMap<Long, Entity>();
 
-	/** The level. */
+	/** The level reference. */
 	private Level level;
 
 	/** The game key listener. */
 	private GameKeyListener gameKeyListener;
 
-	/** The updater. */
+	/** The update method task. */
 	private Runnable updater;
 
 	/** The update thread. */
 	private Thread updateThread;
 
 	/** The window listener. */
+	@SuppressWarnings("unused")
 	private GameWindowListener windowListener;
 
 	/** The game buffer. */
 	private GameBuffer gameBuffer;
-	
-	/** The active. */
+
+	/**
+	 * The active flag that indicates if the window has focus. Pauses the game
+	 * if false.
+	 */
 	private boolean active = false;
 
 	/**
@@ -160,7 +161,7 @@ public class GameWindow extends JFrame {
 		for (Ball b : level.getLocalPlayer().getBallsList()) {
 			addElement(new BallElement(), b);
 		}
-
+		// add text for lives
 		addElement(new TextElement("Lives: ", 50, Level.LEVEL_HEIGHT - 50) {
 			@Override
 			public void draw(Graphics g) {
@@ -170,8 +171,9 @@ public class GameWindow extends JFrame {
 				}
 			}
 		}, null);
-		
-		addElement(new TextElement("Points: ", Level.LEVEL_WIDTH - 100, Level.LEVEL_HEIGHT - 50) {
+		// add text for points
+		addElement(new TextElement("Points: ", Level.LEVEL_WIDTH - 100,
+				Level.LEVEL_HEIGHT - 50) {
 			@Override
 			public void draw(Graphics g) {
 				if (isVisible) {
@@ -181,7 +183,7 @@ public class GameWindow extends JFrame {
 			}
 		}, null);
 
-		// add each brick
+		// add each brick from the level
 		for (Brick b : level.getBricksList()) {
 			addElement(new BrickElement(), b);
 		}
@@ -239,24 +241,17 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
-	 * The listener interface for receiving gameKey events. The class that is
-	 * interested in processing a gameKey event implements this interface, and
-	 * the object created with that class is registered with a component using
-	 * the component's <code>addGameKeyListener<code> method. When
-	 * the gameKey event occurs, that object's appropriate
-	 * method is invoked.
-	 * 
-	 * @see GameKeyEvent
+	 * The listener class for receiving key events.
 	 */
 	private class GameKeyListener implements KeyListener {
 
-		/** The left. */
+		/** The left movement flag for the left arrow key. */
 		boolean left;
 
-		/** The right. */
+		/** The right movement flag for the right arrow key. */
 		boolean right;
 
-		/** The exit. */
+		/** The exit flag if ESC was pressed. */
 		boolean exit;
 
 		/*
@@ -304,14 +299,7 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
-	 * The listener interface for receiving gameWindow events. The class that is
-	 * interested in processing a gameWindow event implements this interface,
-	 * and the object created with that class is registered with a component
-	 * using the component's <code>addGameWindowListener<code> method. When
-	 * the gameWindow event occurs, that object's appropriate
-	 * method is invoked.
-	 * 
-	 * @see GameWindowEvent
+	 * The listener interface for receiving window events.
 	 */
 	private class GameWindowListener implements WindowListener {
 

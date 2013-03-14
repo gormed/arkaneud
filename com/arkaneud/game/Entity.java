@@ -28,33 +28,31 @@
  * File: Entity.java
  * Type: Entity
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 14.03.2013 - 13:47:09 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Entity.
+ * The Class Entity discribes the abstract base class that is the parent of all
+ * game objects that can be observed and updated.
  */
 public abstract class Entity extends Observable implements Updateable {
 
-	/** The x pos. */
-	float xPos = 0;
-	
-	/** The y pos. */
-	float yPos = 0;
-	
-	/** The width. */
+	/** The position of the entity. */
+	Point2D.Float position;
+
+	/** The width of the entity. */
 	float width = 0;
-	
-	/** The height. */
+
+	/** The height of the entity. */
 	float height = 0;
-	
-	/** The collision. */
+
+	/** The collision rectangle of this entity. */
 	Rectangle2D.Float collision;
 
 	/**
@@ -62,15 +60,16 @@ public abstract class Entity extends Observable implements Updateable {
 	 */
 	public Entity() {
 		super();
+		position = new Point2D.Float(0, 0);
 	}
 
 	/**
-	 * Creates the collision.
+	 * Creates the collision rectangle for the entity.
 	 */
 	public abstract void createCollision();
 
 	/**
-	 * Gets the collision.
+	 * Gets the collision of the entity.
 	 * 
 	 * @return the collision
 	 */
@@ -79,7 +78,8 @@ public abstract class Entity extends Observable implements Updateable {
 	}
 
 	/**
-	 * Sets the position.
+	 * Sets the position of the entity. Position of entitys are always the
+	 * center of it.
 	 * 
 	 * @param x
 	 *            the x
@@ -87,17 +87,16 @@ public abstract class Entity extends Observable implements Updateable {
 	 *            the y
 	 */
 	public void setPosition(float x, float y) {
-		xPos = x;
-		yPos = y;
+		position.setLocation(x, y);
 	}
 
-	/**
-	 * Update obsersers.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param gap
-	 *            the gap
+	 * @see com.arkaneud.game.Updateable#updateObservers(float)
 	 */
-	void updateObsersers(float gap) {
+	@Override
+	public void updateObservers(float gap) {
 		update(gap);
 		setChanged();
 		notifyObservers(gap);
@@ -111,38 +110,30 @@ public abstract class Entity extends Observable implements Updateable {
 	@Override
 	public abstract void update(float gap);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.arkaneud.game.Updateable#updateObservers(long)
-	 */
-	@Override
-	public void updateObservers(float gap) {
-		update(gap);
-		setChanged();
-		notifyObservers(gap);
-	}
-
 	/**
-	 * Gets the x pos.
+	 * Gets the x pos of the entity. Position of entitys are always the center
+	 * of it.
 	 * 
 	 * @return the x pos
 	 */
 	public float getXPos() {
-		return xPos;
+		return position.x;
 	}
 
 	/**
-	 * Gets the y pos.
+	 * Gets the y pos of the entity. Position of entitys are always the center
+	 * of it. This method flips the original coordinate to a y-axis that goes
+	 * from top to bottom of the window/level!
+	 * To obtain the real position in simulation, please use the position-field.
 	 * 
 	 * @return the y pos
 	 */
 	public float getYPos() {
-		return Level.LEVEL_HEIGHT - yPos;
+		return Level.LEVEL_HEIGHT - position.y;
 	}
 
 	/**
-	 * Gets the width.
+	 * Gets the width of the entity.
 	 * 
 	 * @return the width
 	 */
@@ -151,13 +142,12 @@ public abstract class Entity extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the height.
+	 * Gets the height of the entity.
 	 * 
 	 * @return the height
 	 */
 	public float getHeight() {
 		return height;
 	}
-	
-	
+
 }

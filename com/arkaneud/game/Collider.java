@@ -40,7 +40,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * The Class Collider.
+ * The Class Collider manages all collisions of the game. In special it is used
+ * by the ball to check collisions with the bricks and the panel via ray
+ * intersection calculation. This class is a singleton!
  */
 public class Collider {
 
@@ -66,18 +68,19 @@ public class Collider {
 	}
 
 	/**
-	 * Intersects.
+	 * Intersects a ball and the paddle and retrieves if they intersect each
+	 * other.
 	 * 
 	 * @param circle
 	 *            the circle
 	 * @param rect
 	 *            the rect
-	 * @return true, if successful
+	 * @return true, if they intersect false otherwise
 	 */
 	public boolean intersects(Ball circle, Paddle rect) {
 		Point2D.Float circleDistance = new Point2D.Float();
-		circleDistance.x = Math.abs(circle.xPos - rect.xPos);
-		circleDistance.y = Math.abs(circle.yPos - rect.yPos);
+		circleDistance.x = Math.abs(circle.position.x - rect.position.x);
+		circleDistance.y = Math.abs(circle.position.y - rect.position.y);
 
 		if (circleDistance.x > (rect.width / 2 + circle.radius)) {
 			return false;
@@ -101,18 +104,18 @@ public class Collider {
 	}
 
 	/**
-	 * Intersects.
+	 * Intersects a ball and a brick and retrieves if they intersect each other.
 	 * 
 	 * @param circle
 	 *            the circle
 	 * @param rect
 	 *            the rect
-	 * @return true, if successful
+	 * @return true, if they intersect false otherwise
 	 */
 	public boolean intersects(Ball circle, Brick rect) {
 		Point2D.Float circleDistance = new Point2D.Float();
-		circleDistance.x = Math.abs(circle.xPos - rect.xPos);
-		circleDistance.y = Math.abs(circle.yPos - rect.yPos);
+		circleDistance.x = Math.abs(circle.position.x - rect.position.x);
+		circleDistance.y = Math.abs(circle.position.y - rect.position.y);
 
 		if (circleDistance.x > (rect.width / 2 + circle.radius)) {
 			return false;
@@ -136,7 +139,8 @@ public class Collider {
 	}
 
 	/**
-	 * The Class RayCaster.
+	 * The Class RayCaster is resposible for ray-rectangle intersection
+	 * caculation. This class is a singleton!
 	 */
 	public static class RayCaster {
 
@@ -321,8 +325,8 @@ public class Collider {
 				// of the ray)
 				float s = ray.getParameter(point);
 				// Calculate the normal of the side which was hit
-				normal.x = -sideRay.dir.y;
-				normal.y = sideRay.dir.x;
+				normal.x = -sideRay.direction.y;
+				normal.y = sideRay.direction.x;
 				// only valid between start and end point
 				boolean valid = (t >= 0 && t <= 1);
 				// create the result accordingly
