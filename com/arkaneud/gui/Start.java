@@ -33,18 +33,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float;
-import java.util.ArrayList;
-
-import com.arkaneud.game.Ray;
-import com.arkaneud.game.Collider.RayCaster;
-import com.arkaneud.game.Collider.RayCaster.CollisionResult;
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class Start.
+ * The Class Start contains the main method.
  */
 public class Start {
 
@@ -62,7 +52,9 @@ public class Start {
 	 *            the arguments
 	 */
 	public static void main(String[] args) {
+		// create a game window
 		GameWindow game = new GameWindow();
+		// and make it visible
 		game.setVisible(true);
 		
 // Ray Caster Testing

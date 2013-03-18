@@ -39,13 +39,13 @@ import java.util.Observable;
 import com.arkaneud.game.*;
 
 /**
- * The Class BallElement.
+ * The Class BallElement represents a ball in the level for displaying.
  */
 public class BallElement extends LevelElement {
 
-	/** The radius. */
+	/** The radius of the drawn ball. */
 	int radius = 0;
-	
+
 	/**
 	 * Instantiates a new ball element.
 	 */
@@ -72,15 +72,15 @@ public class BallElement extends LevelElement {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		//float gap = (Float) arg;
+		// float gap = (Float) arg;
 		if (o instanceof Ball) {
 			Ball b = (Ball) o;
 			x = (int) b.getXPos();
 			y = (int) b.getYPos();
 			isVisible = b.isActive();
 			radius = b.getRadius();
-			width = radius*2;
-			height = radius*2;
+			width = radius * 2;
+			height = radius * 2;
 		}
 	}
 

@@ -39,7 +39,7 @@ import java.util.Observable;
 import com.arkaneud.game.*;
 
 /**
- * The Class BrickElement.
+ * The Class BrickElement represents a brick of the level for displaying.
  */
 public class BrickElement extends LevelElement {
 
@@ -58,8 +58,7 @@ public class BrickElement extends LevelElement {
 	@Override
 	public void draw(Graphics g) {
 		if (isVisible)
-			g.drawRect(x - width/2, y - height/2, width,
-					height);
+			g.drawRect(x - width / 2, y - height / 2, width, height);
 	}
 
 	/*

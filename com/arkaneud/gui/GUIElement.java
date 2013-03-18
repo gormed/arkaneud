@@ -28,7 +28,7 @@
  * File: GUIElement.java
  * Type: GUIElement
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 18.03.2013 - 14:10:46 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -37,7 +37,6 @@ import java.awt.Graphics;
 import java.util.Observable;
 import java.util.Observer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GUIElement.
  */
@@ -45,26 +44,28 @@ public abstract class GUIElement implements Observer {
 
 	/** The unique element id. */
 	private static long uniqueElementID = 0;
-	
+
 	/**
-	 * Gets the id.
+	 * Gets the id internally.
 	 * 
 	 * @return the id
 	 */
-	private static long getID() { return uniqueElementID++; }
-	
-	/** The name. */
+	private static long getID() {
+		return uniqueElementID++;
+	}
+
+	/** The name of the element. */
 	private String name = "element";
-	
-	/** The y. */
-	int x,y;
-	
-	/** The is visible. */
+
+	/** The x and y coordinate on the java awt surface. */
+	int x, y;
+
+	/** The visiblity flag. */
 	boolean isVisible;
-	
+
 	/** The id. */
 	private long id = getID();
-	
+
 	/**
 	 * Instantiates a new gUI element.
 	 * 
@@ -74,7 +75,7 @@ public abstract class GUIElement implements Observer {
 	public GUIElement(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * Instantiates a new gUI element.
 	 */
@@ -83,16 +84,16 @@ public abstract class GUIElement implements Observer {
 	}
 
 	/**
-	 * Gets the element id.
+	 * Gets the elements id.
 	 * 
 	 * @return the element id
 	 */
 	public Long getElementID() {
 		return id;
 	}
-	
+
 	/**
-	 * Gets the name.
+	 * Gets the elements name.
 	 * 
 	 * @return the name
 	 */
@@ -101,18 +102,18 @@ public abstract class GUIElement implements Observer {
 	}
 
 	/**
-	 * Gets the y.
+	 * Gets the x coordinate.
 	 * 
-	 * @return the y
+	 * @return the elements x coordinate
 	 */
 	public int getX() {
 		return x;
 	}
 
 	/**
-	 * Gets the y.
+	 * Gets the y coordinate.
 	 * 
-	 * @return the y
+	 * @return the elements y coordinate
 	 */
 	public int getY() {
 		return y;
@@ -128,7 +129,7 @@ public abstract class GUIElement implements Observer {
 	}
 
 	/**
-	 * Sets the visible.
+	 * Sets the visiblity flag.
 	 * 
 	 * @param isVisible
 	 *            the new visible
@@ -136,31 +137,33 @@ public abstract class GUIElement implements Observer {
 	void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
-	
+
 	/**
-	 * Sets the position.
+	 * Sets the position on screen.
 	 * 
 	 * @param x
-	 *            the x
+	 *            the elements y coordinate
 	 * @param y
-	 *            the y
+	 *            the elements y coordinate
 	 */
 	void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override
 	public abstract void update(Observable o, Object arg);
-	
+
 	/**
-	 * Draw.
+	 * Draws the element on screen.
 	 * 
 	 * @param g
-	 *            the g
+	 *            the Graphics reference to paint
 	 */
 	public abstract void draw(Graphics g);
 

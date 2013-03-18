@@ -33,27 +33,23 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class LevelElement.
+ * The Class LevelElement defines a default and abstract element of the level,
+ * could be a ball or paddle or brick.
  */
 public abstract class LevelElement extends GUIElement {
 
-	//public 
-	
 	/** The width. */
 	int width;
-	
+
 	/** The height. */
 	int height;
-	
+
 	/**
 	 * Instantiates a new level element.
 	 */
-	public LevelElement(){
+	public LevelElement() {
 
 	}
-	
 
 }

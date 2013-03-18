@@ -28,7 +28,7 @@
  * File: TextElement.java
  * Type: TextElement
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 18.03.2013 - 14:05:12 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -37,7 +37,7 @@ import java.awt.Graphics;
 import java.util.Observable;
 
 /**
- * The Class TextElement.
+ * The Class TextElement displays text on JAVA awt surfaces.
  */
 public abstract class TextElement extends GUIElement {
 
@@ -82,6 +82,9 @@ public abstract class TextElement extends GUIElement {
 	@Override
 	public abstract void draw(Graphics g);
 	
+	/* (non-Javadoc)
+	 * @see com.arkaneud.gui.GUIElement#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		

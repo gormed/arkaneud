@@ -37,44 +37,47 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DoubleBuffer.
+ * The Class DoubleBuffer is a Java awt Panel with ability to draw double
+ * buffered content.
  */
 class DoubleBuffer extends Panel {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 5889543438291063238L;
 
 	// class variables
 	/** The buffer width. */
 	private int bufferWidth;
-	
+
 	/** The buffer height. */
 	private int bufferHeight;
-	
+
 	/** The buffer image. */
 	private Image bufferImage;
-	
+
 	/** The buffer graphics. */
 	private Graphics bufferGraphics;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#update(java.awt.Graphics)
 	 */
 	public void update(Graphics g) {
 		paint(g);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Container#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
 		// checks the buffersize with the current panelsize
 		// or initialises the image with the first paint
-		if (bufferWidth != getSize().width
-				|| bufferHeight != getSize().height || bufferImage == null
-				|| bufferGraphics == null)
+		if (bufferWidth != getSize().width || bufferHeight != getSize().height
+				|| bufferImage == null || bufferGraphics == null)
 			resetBuffer();
 
 		if (bufferGraphics != null) {
@@ -91,18 +94,17 @@ class DoubleBuffer extends Panel {
 	}
 
 	/**
-	 * Paint buffer.
+	 * The paint buffer method, in classes extended from this one, add something to
+	 * paint here! always remember, g is the offscreen graphics!
 	 * 
 	 * @param g
-	 *            the g
+	 *            the offscreen graphics reference
 	 */
 	public void paintBuffer(Graphics g) {
-		// in classes extended from this one, add something to paint here!
-		// always remember, g is the offscreen graphics
 	}
 
 	/**
-	 * Reset buffer.
+	 * Resets the buffer.
 	 */
 	private void resetBuffer() {
 		// always keep track of the image size

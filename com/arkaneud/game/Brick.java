@@ -40,7 +40,7 @@ import java.awt.geom.Rectangle2D;
 import com.arkaneud.data.LevelData.BrickData;
 
 /**
- * The Class Brick.
+ * The Class Brick represents a brick in simulation.
  */
 public class Brick extends Entity {
 

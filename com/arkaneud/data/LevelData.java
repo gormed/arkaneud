@@ -90,7 +90,6 @@ public class LevelData {
 				brickData.add(new BrickData(x * 60, y * 30, Color.GREEN));				
 			}
 		}
-
 	}
 
 	/**
@@ -101,7 +100,4 @@ public class LevelData {
 	public ArrayList<BrickData> getBrickData() {
 		return new ArrayList<LevelData.BrickData>(brickData);
 	}
-
-	
-	
 }

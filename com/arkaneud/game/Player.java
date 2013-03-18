@@ -37,7 +37,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 /**
- * The Class Player.
+ * The Class Player represents the player in simulation and holds the paddle as
+ * well as the ball references.
  */
 public class Player extends Observable implements Updateable {
 
@@ -123,31 +124,34 @@ public class Player extends Observable implements Updateable {
 	 */
 	@Override
 	public void updateObservers(float gap) {
+		// first update the object
 		update(gap);
+		// set changed flag
 		setChanged();
+		// notify the observing objects (gui) that there are changes to display
 		notifyObservers(gap);
 	}
 
 	/**
-	 * Checks for won.
+	 * Checks if player has won.
 	 * 
-	 * @return true, if successful
+	 * @return true, if won
 	 */
 	public boolean hasWon() {
 		return hasWon;
 	}
 
 	/**
-	 * Checks for lost.
+	 * Checks if player has lost.
 	 * 
-	 * @return true, if successful
+	 * @return true, if lost
 	 */
 	public boolean hasLost() {
 		return hasLost;
 	}
 
 	/**
-	 * Gets the lives.
+	 * Gets the lives of the player.
 	 * 
 	 * @return the lives
 	 */
@@ -156,7 +160,7 @@ public class Player extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the name.
+	 * Gets the name of the player.
 	 * 
 	 * @return the name
 	 */
@@ -165,7 +169,7 @@ public class Player extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the points.
+	 * Gets the points of the player.
 	 * 
 	 * @return the points
 	 */
@@ -174,7 +178,7 @@ public class Player extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the paddle.
+	 * Gets the paddle of the player.
 	 * 
 	 * @return the paddle
 	 */
@@ -183,7 +187,7 @@ public class Player extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the balls list.
+	 * Gets the balls list, remaining for the player.
 	 * 
 	 * @return the balls list
 	 */
@@ -191,7 +195,6 @@ public class Player extends Observable implements Updateable {
 		return new ArrayList<Ball>(ballsList);
 	}
 
-	
 	/**
 	 * Adds the points recieved for destroying a brick.
 	 * 

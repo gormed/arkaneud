@@ -39,7 +39,7 @@ import java.util.Observable;
 import com.arkaneud.game.Paddle;
 
 /**
- * The Class PaddleElement.
+ * The Class PaddleElement represents the players paddle.
  */
 public class PaddleElement extends LevelElement {
 
