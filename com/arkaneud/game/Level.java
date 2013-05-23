@@ -92,7 +92,7 @@ public class Level extends Observable implements Updateable {
 	 * @param data
 	 *            the data
 	 */
-	public void initialize(LevelData data) {
+	public void initialize(LevelData data, String playerName) {
 		if (isInistialized)
 			return;
 
@@ -104,7 +104,7 @@ public class Level extends Observable implements Updateable {
 		 * com.sun.security.auth.module.NTSystem(); localPlayer = new
 		 * Player(System.getProperty(NTSystem.getName()), this);
 		 */
-		localPlayer = new Player("local");
+		localPlayer = new Player(playerName);
 
 		isInistialized = true;
 	}

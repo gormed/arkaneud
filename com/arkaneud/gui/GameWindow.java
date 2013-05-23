@@ -34,14 +34,21 @@
 package com.arkaneud.gui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import com.arkaneud.data.LevelData;
 import com.arkaneud.game.Ball;
@@ -58,10 +65,15 @@ public class GameWindow extends JFrame {
 	private static final long serialVersionUID = -5097177280076223641L;
 
 	/** The drawn elements list. */
-	private HashMap<Long, GUIElement> drawnElementsList = new HashMap<Long, GUIElement>();
+	private Map<Long, GUIElement> drawnElementsList = Collections
+			.synchronizedMap(new HashMap<Long, GUIElement>());
+
+	private ArrayList<GUIElement> addGUIElements = new ArrayList<GUIElement>();
+	private ArrayList<Long> removeGUIElements = new ArrayList<Long>();
 
 	/** The entity list. */
-	private HashMap<Long, Entity> entityList = new HashMap<Long, Entity>();
+	private Map<Long, Entity> entityList = Collections
+			.synchronizedMap(new HashMap<Long, Entity>());
 
 	/** The level reference. */
 	private Level level;
@@ -79,8 +91,14 @@ public class GameWindow extends JFrame {
 	@SuppressWarnings("unused")
 	private GameWindowListener windowListener;
 
+	private MenuPanel menu;
+	private HighscorePanel highscore;
+
 	/** The game buffer. */
 	private GameBuffer gameBuffer;
+
+	/** The exit flag if user wants to leave. */
+	boolean exit;
 
 	/**
 	 * The active flag that indicates if the window has focus. Pauses the game
@@ -94,22 +112,34 @@ public class GameWindow extends JFrame {
 	public GameWindow() {
 		// Frame setup
 		super("Arkaneud");
-		setSize(Level.LEVEL_WIDTH, Level.LEVEL_HEIGHT);
-		setResizable(false);
-		setLocationByPlatform(true);
-		// double buffer drawing logic
-		gameBuffer = new GameBuffer();
-		add(gameBuffer);
+		// contentPane = this.getContentPane();
+		// init main menu
+		init();
 
-		// create level from data
-		level = Level.getInstance();
-		level.initialize(new LevelData());
+	}
 
-		// add the listeners for user input and exit handling
-		gameBuffer.addKeyListener(gameKeyListener = new GameKeyListener());
-		addWindowListener(windowListener = new GameWindowListener());
+	public void startGame() {
 		// load level, create ball and paddle
 		loadLevel();
+		// start the game-thread
+		startGameThread();
+	}
+
+	public void showHighscore() {
+		add(highscore);
+	}
+
+	public void exitGame() {
+		if (updateThread != null && updateThread.isAlive())
+			exit = true;
+		else
+			System.exit(0);
+	}
+
+	/**
+	 * Sets up the game-thread.
+	 */
+	private void startGameThread() {
 		// update loop
 		updater = new Runnable() {
 
@@ -123,7 +153,7 @@ public class GameWindow extends JFrame {
 				// sync the key input with thread
 				synchronized (gameKeyListener) {
 					// loop endless until exit request
-					while (!gameKeyListener.exit) {
+					while (!exit) {
 						if (!active)
 							updateTime = System.currentTimeMillis();
 						// get current time
@@ -153,9 +183,44 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
+	 * Initialize the game.
+	 */
+	private void init() {
+		setSize(Level.LEVEL_WIDTH, Level.LEVEL_HEIGHT);
+		setResizable(false);
+		setLocationByPlatform(true);
+		addWindowListener(windowListener = new GameWindowListener());
+		menu = new MenuPanel(this);
+		highscore = new HighscorePanel(this);
+		
+		
+		showMenu();
+	}
+
+	public void showMenu() {
+		add(menu);
+		validate();
+	}
+
+	/**
 	 * Load level.
 	 */
 	private void loadLevel() {
+		String name = JOptionPane.showInputDialog("What is your name?");
+		if (name == null) {
+			name = "nameless";
+		}
+		// double buffer drawing logic
+		gameBuffer = new GameBuffer();
+		add(gameBuffer);
+
+		// create level from data
+		level = Level.getInstance();
+		level.initialize(new LevelData(), name);
+
+		// add the listeners for user input and exit handling
+		gameBuffer.addKeyListener(gameKeyListener = new GameKeyListener());
+
 		// add paddle and ball in updater and drawer
 		addElement(new PaddleElement(), level.getLocalPlayer().getPaddle());
 		for (Ball b : level.getLocalPlayer().getBallsList()) {
@@ -183,6 +248,21 @@ public class GameWindow extends JFrame {
 			}
 		}, null);
 
+		// add text for points
+		addElement(new TextElement("PRESS enter TO START!",
+				(int) (Level.LEVEL_WIDTH * 0.5f - 100), 100) {
+			@Override
+			public void draw(Graphics g) {
+				if (isVisible) {
+					g.drawString(this.getText(), x, y);
+				}
+				if (updateThread.isAlive()) {
+					removeGUIElement(this.getElementID());
+				}
+
+			}
+		}, null);
+
 		// add each brick from the level
 		for (Brick b : level.getBricksList()) {
 			addElement(new BrickElement(), b);
@@ -204,8 +284,23 @@ public class GameWindow extends JFrame {
 			entity.addObserver(element);
 		// add entity to list
 		entityList.put(element.getElementID(), entity);
+		addGUIElements.add(element);
 		// add the according gui element to draw list
-		return drawnElementsList.put(element.getElementID(), element);
+		return element;
+	}
+
+	/**
+	 * Removes the gui element.
+	 * 
+	 * @param id
+	 *            the id
+	 */
+	public void removeGUIElement(long id) {
+		Observable o = entityList.remove(id);
+		if (o != null)
+			o.deleteObserver(drawnElementsList.remove(id));
+		else
+			removeGUIElements.add(id);
 	}
 
 	/**
@@ -231,16 +326,6 @@ public class GameWindow extends JFrame {
 	}
 
 	/**
-	 * Removes the gui element.
-	 * 
-	 * @param id
-	 *            the id
-	 */
-	public void removeGUIElement(long id) {
-		entityList.remove(id).deleteObserver(drawnElementsList.remove(id));
-	}
-
-	/**
 	 * The listener class for receiving key events.
 	 */
 	private class GameKeyListener implements KeyListener {
@@ -250,9 +335,6 @@ public class GameWindow extends JFrame {
 
 		/** The right movement flag for the right arrow key. */
 		boolean right;
-
-		/** The exit flag if ESC was pressed. */
-		boolean exit;
 
 		/*
 		 * (non-Javadoc)
@@ -324,7 +406,10 @@ public class GameWindow extends JFrame {
 		 */
 		@Override
 		public void windowClosing(WindowEvent e) {
-			gameKeyListener.exit = true;
+			if (updateThread != null && updateThread.isAlive())
+				exit = true;
+			else
+				System.exit(0);
 		}
 
 		/*
@@ -409,10 +494,19 @@ public class GameWindow extends JFrame {
 		 */
 		@Override
 		public void paintBuffer(Graphics g) {
+			for (GUIElement element : addGUIElements) {
+				drawnElementsList.put(element.getElementID(), element);
+			}
+			for (Long id : removeGUIElements) {
+				drawnElementsList.remove(id);
+			}
+			addGUIElements.clear();
+			removeGUIElements.clear();
 			for (Map.Entry<Long, GUIElement> entry : drawnElementsList
 					.entrySet()) {
 				entry.getValue().draw(g);
 			}
 		}
 	}
+
 }

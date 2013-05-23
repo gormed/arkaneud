@@ -19,6 +19,7 @@ public class Highscore {
 	
 	// Singleton
 	
+	private static final String HIGHSCORE_PATH = "highscore.hsl";
 	private static Highscore instance;
 	
 	public static Highscore getInstance() {
@@ -30,7 +31,7 @@ public class Highscore {
 	
 	private Highscore() {
 		try {
-			ArrayList<HighscoreDataItem> dataList = data.loadHighscore("highscore.hsl");
+			ArrayList<HighscoreDataItem> dataList = data.loadHighscore(HIGHSCORE_PATH);
 			highscoreList = new ArrayList<Highscore.HighscoreItem>();
 			for (HighscoreDataItem dataIt : dataList) {
 				highscoreList.add(new HighscoreItem(dataIt.name, dataIt.points));
@@ -72,7 +73,7 @@ public class Highscore {
 	
 	public void save() {
 		try {
-			data.saveHighscore("highscore.hsl");
+			data.saveHighscore(HIGHSCORE_PATH);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, null, "Highscore couldn't be saved!", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
