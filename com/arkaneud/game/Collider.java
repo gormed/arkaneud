@@ -211,11 +211,11 @@ public class Collider {
 			// top
 			//
 			// tl-------->tr
-			// /\ |
-			// l| |
-			// e| X | right
-			// f| mid |
-			// t| \/
+			// /\ 		  |
+			// l|         |
+			// e|    X    | right
+			// f|    mid  |
+			// t|        \/
 			// bl<--------br
 			//
 			// bottom

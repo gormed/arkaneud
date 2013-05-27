@@ -25,8 +25,8 @@
  * Email me for any questions: hans.ferchland[at]gmx.de
  *
  * Project: arkaneud
- * File: Entity.java
- * Type: Entity
+ * File: Collidable.java
+ * Type: Collidable
  *
  * Documentation created: 14.03.2013 - 13:47:09 by Hans Ferchland
  *
@@ -38,38 +38,38 @@ import java.awt.geom.Rectangle2D;
 import java.util.Observable;
 
 /**
- * The Class Entity discribes the abstract base class that is the parent of all
+ * The Class Collidable discribes the abstract base class that is the parent of all
  * game objects that can be observed and updated.
  */
-public abstract class Entity extends Observable implements Updateable {
+public abstract class Collidable extends Observable implements Updateable {
 
-	/** The position of the entity. */
+	/** The position of the Collidable. */
 	Point2D.Float position;
 
-	/** The width of the entity. */
+	/** The width of the Collidable. */
 	float width = 0;
 
-	/** The height of the entity. */
+	/** The height of the Collidable. */
 	float height = 0;
 
-	/** The collision rectangle of this entity. */
+	/** The collision rectangle of this Collidable. */
 	Rectangle2D.Float collision;
 
 	/**
-	 * Instantiates a new entity.
+	 * Instantiates a new Collidable.
 	 */
-	public Entity() {
+	public Collidable() {
 		super();
 		position = new Point2D.Float(0, 0);
 	}
 
 	/**
-	 * Creates the collision rectangle for the entity.
+	 * Creates the collision rectangle for the Collidable.
 	 */
 	public abstract void createCollision();
 
 	/**
-	 * Gets the collision of the entity.
+	 * Gets the collision of the Collidable.
 	 * 
 	 * @return the collision
 	 */
@@ -78,7 +78,7 @@ public abstract class Entity extends Observable implements Updateable {
 	}
 
 	/**
-	 * Sets the position of the entity. Position of entitys are always the
+	 * Sets the position of the Collidable. Position of Collidables are always the
 	 * center of it.
 	 * 
 	 * @param x
@@ -111,7 +111,7 @@ public abstract class Entity extends Observable implements Updateable {
 	public abstract void update(float gap);
 
 	/**
-	 * Gets the x pos of the entity. Position of entitys are always the center
+	 * Gets the x pos of the Collidable. Position of Collidables are always the center
 	 * of it.
 	 * 
 	 * @return the x pos
@@ -121,7 +121,7 @@ public abstract class Entity extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the y pos of the entity. Position of entitys are always the center
+	 * Gets the y pos of the Collidable. Position of Collidables are always the center
 	 * of it. This method flips the original coordinate to a y-axis that goes
 	 * from top to bottom of the window/level!
 	 * To obtain the real position in simulation, please use the position-field.
@@ -133,7 +133,7 @@ public abstract class Entity extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the width of the entity.
+	 * Gets the width of the Collidable.
 	 * 
 	 * @return the width
 	 */
@@ -142,7 +142,7 @@ public abstract class Entity extends Observable implements Updateable {
 	}
 
 	/**
-	 * Gets the height of the entity.
+	 * Gets the height of the Collidable.
 	 * 
 	 * @return the height
 	 */
