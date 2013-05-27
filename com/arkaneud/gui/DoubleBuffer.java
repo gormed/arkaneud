@@ -28,11 +28,12 @@
  * File: DoubleBuffer.java
  * Type: DoubleBuffer
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 27.05.2013 - 01:52:52 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
@@ -59,6 +60,9 @@ class DoubleBuffer extends Panel {
 	/** The buffer graphics. */
 	private Graphics bufferGraphics;
 
+	/** The clear color. */
+	private Color clearColor = new Color(0.54f, 0.95f, 0.5f);
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -83,19 +87,21 @@ class DoubleBuffer extends Panel {
 		if (bufferGraphics != null) {
 			// this clears the offscreen image, not the onscreen one
 			bufferGraphics.clearRect(0, 0, bufferWidth, bufferHeight);
-
+			bufferGraphics.setColor(clearColor);
+			bufferGraphics.fillRect(0, 0, bufferWidth, bufferHeight);
 			// calls the paintbuffer method with
 			// the offscreen graphics as a param
 			paintBuffer(bufferGraphics);
 
+			
 			// we finaly paint the offscreen image onto the onscreen image
 			g.drawImage(bufferImage, 0, 0, this);
 		}
 	}
 
 	/**
-	 * The paint buffer method, in classes extended from this one, add something to
-	 * paint here! always remember, g is the offscreen graphics!
+	 * The paint buffer method, in classes extended from this one, add something
+	 * to paint here! always remember, g is the offscreen graphics!.
 	 * 
 	 * @param g
 	 *            the offscreen graphics reference

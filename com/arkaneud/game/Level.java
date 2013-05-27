@@ -66,7 +66,7 @@ public class Level extends Observable implements Updateable {
 	private ArrayList<Brick> bricksList = null;
 
 	/** The local player. */
-	private Player localPlayer;
+	private Controller playerController;
 
 	/**
 	 * Instantiates a new level.
@@ -96,6 +96,7 @@ public class Level extends Observable implements Updateable {
 		if (isInistialized)
 			return;
 
+		isOver = false;
 		levelData = data;
 		bricksList = getBricksFromData();
 		/*
@@ -104,7 +105,7 @@ public class Level extends Observable implements Updateable {
 		 * com.sun.security.auth.module.NTSystem(); localPlayer = new
 		 * Player(System.getProperty(NTSystem.getName()), this);
 		 */
-		localPlayer = new Player(playerName);
+		playerController = new Controller(playerName);
 
 		isInistialized = true;
 	}
@@ -112,13 +113,13 @@ public class Level extends Observable implements Updateable {
 	/**
 	 * Destorys the level instance so it can be reinitialized.
 	 */
-	public void destory() {
-		if (isInistialized)
+	public void destroy() {
+		if (!isInistialized)
 			return;
 
 		levelData = null;
 		bricksList.clear();
-		localPlayer = null;
+		playerController = null;
 
 		isInistialized = false;
 	}
@@ -154,9 +155,15 @@ public class Level extends Observable implements Updateable {
 	 */
 	@Override
 	public void update(float gap) {
-		localPlayer.updateObservers(gap);
-		if (localPlayer.hasLost() || localPlayer.hasWon())
+		// update the players controller
+		playerController.updateObservers(gap);
+		// check for game-end
+		if (playerController.hasLost() || playerController.hasWon()) {
+			// signal the game is over
 			isOver = true;
+		}
+		// update all bricks. this is actually unused, but can be used for
+		// animation purposes
 		for (Brick b : bricksList) {
 			b.updateObservers(gap);
 		}
@@ -169,6 +176,8 @@ public class Level extends Observable implements Updateable {
 	 */
 	@Override
 	public void updateObservers(float gap) {
+		if (!isInistialized)
+			return;
 		update(gap);
 		setChanged();
 		notifyObservers(gap);
@@ -197,8 +206,8 @@ public class Level extends Observable implements Updateable {
 	 * 
 	 * @return the local player
 	 */
-	public Player getLocalPlayer() {
-		return localPlayer;
+	public Controller getPlayerController() {
+		return playerController;
 	}
 
 }

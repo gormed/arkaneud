@@ -1,3 +1,36 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * arkaneud Project (c) 2013 by Hans Ferchland
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * 
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * GNU Public License
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License 3 as published by
+ * the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Email me for any questions: hans.ferchland[at]gmx.de
+ *
+ * Project: arkaneud
+ * File: HighscoreLoader.java
+ * Type: HighscoreLoader
+ *
+ * Documentation created: 26.05.2013 - 14:49:23 by Hans Ferchland
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.data;
 
 import java.io.BufferedReader;
@@ -8,13 +41,24 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import com.arkaneud.game.Highscore;
 import com.arkaneud.game.Highscore.HighscoreItem;
 
+/**
+ * The Class HighscoreLoader loads a highscore list from filesys.
+ */
 public class HighscoreLoader {
 	
+	/**
+	 * Load highscore from a specific path.
+	 * 
+	 * @param filepath
+	 *            the filepath
+	 * @return the array list
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public ArrayList<HighscoreDataItem> loadHighscore(String filepath) throws IOException {
 		File file = new File(filepath);
 		StringBuffer content = new StringBuffer();
@@ -52,6 +96,14 @@ public class HighscoreLoader {
 		return highscoreList;
 	}
 	
+	/**
+	 * Save highscore to a specific path.
+	 * 
+	 * @param filepath
+	 *            the filepath
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public void saveHighscore(String filepath) throws IOException {
 		File file = new File(filepath);
 		BufferedWriter writer = null;
@@ -61,7 +113,7 @@ public class HighscoreLoader {
 			writer = new BufferedWriter(new FileWriter(file));
 			for (HighscoreItem it : highscoreList) {
 				writer.append(it.getName()+","+it.getPoints());
-			}
+				writer.newLine();			}
 	 	} catch (FileNotFoundException e) {
 	 		throw e;
 	 	} catch (IOException e) {
@@ -80,10 +132,25 @@ public class HighscoreLoader {
 	
 	// Subclass
 	
+	/**
+	 * The Class HighscoreDataItem stores the data of one HS entry.
+	 */
 	public class HighscoreDataItem {
+		
+		/** The name. */
 		public String name;
+		
+		/** The points. */
 		public Integer points;
 		
+		/**
+		 * Instantiates a new highscore data item.
+		 * 
+		 * @param name
+		 *            the name
+		 * @param points
+		 *            the points
+		 */
 		public HighscoreDataItem(String name, int points) {
 			this.name = name;
 			this.points = points;

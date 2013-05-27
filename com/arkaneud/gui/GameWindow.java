@@ -34,7 +34,7 @@
 package com.arkaneud.gui;
 
 import java.awt.Color;
-import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -48,12 +48,11 @@ import java.util.Observable;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import com.arkaneud.data.LevelData;
 import com.arkaneud.game.Ball;
 import com.arkaneud.game.Brick;
-import com.arkaneud.game.Entity;
+import com.arkaneud.game.Collidable;
+import com.arkaneud.game.Highscore;
 import com.arkaneud.game.Level;
 
 /**
@@ -68,12 +67,14 @@ public class GameWindow extends JFrame {
 	private Map<Long, GUIElement> drawnElementsList = Collections
 			.synchronizedMap(new HashMap<Long, GUIElement>());
 
+	/** The GUI Elements that need to be added */
 	private ArrayList<GUIElement> addGUIElements = new ArrayList<GUIElement>();
+	/** The GUI Elements that need to be removed */
 	private ArrayList<Long> removeGUIElements = new ArrayList<Long>();
 
 	/** The entity list. */
-	private Map<Long, Entity> entityList = Collections
-			.synchronizedMap(new HashMap<Long, Entity>());
+	private Map<Long, Collidable> entityList = Collections
+			.synchronizedMap(new HashMap<Long, Collidable>());
 
 	/** The level reference. */
 	private Level level;
@@ -91,7 +92,9 @@ public class GameWindow extends JFrame {
 	@SuppressWarnings("unused")
 	private GameWindowListener windowListener;
 
+	/** The Menu-Panel displaying the components */
 	private MenuPanel menu;
+	/** The Highscore display panel */
 	private HighscorePanel highscore;
 
 	/** The game buffer. */
@@ -126,10 +129,13 @@ public class GameWindow extends JFrame {
 	}
 
 	public void showHighscore() {
+		highscore.refresh();
 		add(highscore);
+		validate();
 	}
 
 	public void exitGame() {
+		Highscore.getInstance().save();
 		if (updateThread != null && updateThread.isAlive())
 			exit = true;
 		else
@@ -150,20 +156,20 @@ public class GameWindow extends JFrame {
 				long updateTime = time;
 				long drawTime = time;
 				long gap = 0;
-				// sync the key input with thread
-				synchronized (gameKeyListener) {
-					// loop endless until exit request
-					while (!exit) {
-						if (!active)
-							updateTime = System.currentTimeMillis();
-						// get current time
-						time = System.currentTimeMillis();
-						gap = time - updateTime;
-						// inject inputs manually
-						level.getLocalPlayer()
-								.getPaddle()
-								.move(gameKeyListener.left,
-										gameKeyListener.right);
+				// reset the exit flag
+				exit = false;
+				// loop endless until exit request
+				while (!exit) {
+					// if game loses the focus
+					if (!active)
+						updateTime = System.currentTimeMillis();
+					// get current time
+					time = System.currentTimeMillis();
+					gap = time - updateTime;
+					// inject inputs manually
+					level.getPlayerController().getPaddle()
+							.move(gameKeyListener.left, gameKeyListener.right);
+					if (!level.isOver()) {
 						// update level elements
 						level.update((float) (((double) gap) * 0.001));
 						if ((time - drawTime) > 16) {
@@ -172,10 +178,26 @@ public class GameWindow extends JFrame {
 							gameBuffer.repaint();
 						}
 						updateTime = time;
+					} else {
+						if (Highscore.getInstance().insertItem(
+								level.getPlayerController().getName(),
+								level.getPlayerController().getPoints())) {
+							unloadLevel();
+							showHighscore();
+						} else {
+							unloadLevel();
+							showMenu();
+						}
 					}
 				}
-				level.destory();
-				System.exit(0);
+				// on leaving the loop, destroy everything
+				level.destroy();
+				remove(gameBuffer);
+				gameBuffer.removeKeyListener(gameKeyListener);
+				gameKeyListener = null;
+				gameBuffer = null;
+				entityList.clear();
+				drawnElementsList.clear();
 			}
 		};
 		// update thread
@@ -192,8 +214,7 @@ public class GameWindow extends JFrame {
 		addWindowListener(windowListener = new GameWindowListener());
 		menu = new MenuPanel(this);
 		highscore = new HighscorePanel(this);
-		
-		
+
 		showMenu();
 	}
 
@@ -206,6 +227,8 @@ public class GameWindow extends JFrame {
 	 * Load level.
 	 */
 	private void loadLevel() {
+
+		// show a input dlg for the players name
 		String name = JOptionPane.showInputDialog("What is your name?");
 		if (name == null) {
 			name = "nameless";
@@ -222,44 +245,56 @@ public class GameWindow extends JFrame {
 		gameBuffer.addKeyListener(gameKeyListener = new GameKeyListener());
 
 		// add paddle and ball in updater and drawer
-		addElement(new PaddleElement(), level.getLocalPlayer().getPaddle());
-		for (Ball b : level.getLocalPlayer().getBallsList()) {
+		addElement(new PaddleElement(), level.getPlayerController().getPaddle());
+		for (Ball b : level.getPlayerController().getBallsList()) {
 			addElement(new BallElement(), b);
 		}
+
 		// add text for lives
-		addElement(new TextElement("Lives: ", 50, Level.LEVEL_HEIGHT - 50) {
+		addElement(new TextElement("Lives: ", 20, Level.LEVEL_HEIGHT - 50) {
+			Font font = new Font("Arial Bold", Font.BOLD, 24);
+
 			@Override
 			public void draw(Graphics g) {
 				if (isVisible) {
+					g.setColor(Color.RED);
+					g.setFont(font);
 					g.drawString(this.getText() + " "
-							+ level.getLocalPlayer().getLives(), x, y);
+							+ level.getPlayerController().getLives(), x, y);
 				}
 			}
 		}, null);
 		// add text for points
-		addElement(new TextElement("Points: ", Level.LEVEL_WIDTH - 100,
+		addElement(new TextElement("Points: ", Level.LEVEL_WIDTH - 160,
 				Level.LEVEL_HEIGHT - 50) {
+			Font font = new Font("Arial Bold", Font.BOLD, 18);
+
 			@Override
 			public void draw(Graphics g) {
 				if (isVisible) {
+					g.setColor(Color.BLUE);
+					g.setFont(font);
 					g.drawString(this.getText() + " "
-							+ level.getLocalPlayer().getPoints(), x, y);
+							+ level.getPlayerController().getPoints(), x, y);
 				}
 			}
 		}, null);
 
 		// add text for points
 		addElement(new TextElement("PRESS enter TO START!",
-				(int) (Level.LEVEL_WIDTH * 0.5f - 100), 100) {
+				(int) (Level.LEVEL_WIDTH * 0.5f - 170), 100) {
+			Font font = new Font("Arial Bold", Font.BOLD, 28);
+
 			@Override
 			public void draw(Graphics g) {
 				if (isVisible) {
+					g.setColor(Color.RED);
+					g.setFont(font);
 					g.drawString(this.getText(), x, y);
 				}
 				if (updateThread.isAlive()) {
 					removeGUIElement(this.getElementID());
 				}
-
 			}
 		}, null);
 
@@ -267,6 +302,10 @@ public class GameWindow extends JFrame {
 		for (Brick b : level.getBricksList()) {
 			addElement(new BrickElement(), b);
 		}
+	}
+
+	private void unloadLevel() {
+		exit = true;
 	}
 
 	/**
@@ -278,7 +317,7 @@ public class GameWindow extends JFrame {
 	 *            the entity
 	 * @return the gUI element
 	 */
-	public GUIElement addElement(GUIElement element, Entity entity) {
+	public GUIElement addElement(GUIElement element, Collidable entity) {
 		// add the observer
 		if (entity != null)
 			entity.addObserver(element);
@@ -321,7 +360,7 @@ public class GameWindow extends JFrame {
 	 *            the id
 	 * @return the entity
 	 */
-	public Entity getEntity(long id) {
+	public Collidable getEntity(long id) {
 		return entityList.get(id);
 	}
 

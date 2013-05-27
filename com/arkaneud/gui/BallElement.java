@@ -33,6 +33,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Observable;
 
@@ -60,6 +61,9 @@ public class BallElement extends LevelElement {
 	@Override
 	public void draw(Graphics g) {
 		if (isVisible()) {
+			g.setColor(Color.ORANGE);
+			g.fillOval(x - radius, y - radius, width, height);
+			g.setColor(Color.BLACK);
 			g.drawOval(x - radius, y - radius, width, height);
 		}
 	}

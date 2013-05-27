@@ -40,7 +40,7 @@ import java.util.Observable;
  * The Class Player represents the player in simulation and holds the paddle as
  * well as the ball references.
  */
-public class Player extends Observable implements Updateable {
+public class Controller extends Observable implements Updateable {
 
 	/** The has lost flag indicates if the player has lost the game. */
 	private boolean hasLost = false;
@@ -69,7 +69,7 @@ public class Player extends Observable implements Updateable {
 	 * @param name
 	 *            the name
 	 */
-	public Player(String name) {
+	public Controller(String name) {
 		paddle = new Paddle();
 		this.name = name;
 		// add three balls :)

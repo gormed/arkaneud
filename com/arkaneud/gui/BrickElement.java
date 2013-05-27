@@ -33,6 +33,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Observable;
 
@@ -43,6 +44,8 @@ import com.arkaneud.game.*;
  */
 public class BrickElement extends LevelElement {
 
+	private Color color;
+	
 	/**
 	 * Instantiates a new brick element.
 	 */
@@ -57,8 +60,11 @@ public class BrickElement extends LevelElement {
 	 */
 	@Override
 	public void draw(Graphics g) {
-		if (isVisible)
-			g.drawRect(x - width / 2, y - height / 2, width, height);
+		if (isVisible) {
+			g.setColor(color);
+			g.fill3DRect(x - width / 2, y - height / 2, width, height, true);
+//			g.drawRect(x - width / 2, y - height / 2, width, height);
+		}
 	}
 
 	/*
@@ -75,6 +81,7 @@ public class BrickElement extends LevelElement {
 			y = (int) b.getYPos();
 			width = (int) b.getWidth();
 			height = (int) b.getHeight();
+			color = b.getColor();
 			setVisible(!b.wasHit());
 		}
 	}

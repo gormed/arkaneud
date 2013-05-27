@@ -33,6 +33,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Observable;
 
@@ -56,8 +57,9 @@ public class PaddleElement extends LevelElement {
 	 */
 	@Override
 	public void draw(Graphics g) {
-
-		g.drawRect(x - width / 2, y - height / 2, width, height);
+		g.setColor(Color.LIGHT_GRAY);
+		g.fill3DRect(x - width / 2, y - height / 2, width, height, true);
+		// g.drawRect(x - width / 2, y - height / 2, width, height);
 	}
 
 	/*

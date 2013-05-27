@@ -42,7 +42,7 @@ import com.arkaneud.game.Collider.RayCaster.CollisionResult;
 /**
  * The Class Ball defines the simulated ball.
  */
-public class Ball extends Entity {
+public class Ball extends Collidable {
 
 	/** The Constant BALL_RADIUS. */
 	public static final int BALL_RADIUS = 6;
@@ -116,11 +116,12 @@ public class Ball extends Entity {
 		RayCaster caster = RayCaster.getInstance();
 		// create the balls movement ray from its velocity and current position
 		Ray ballRay = new Ray(position, new Point2D.Float(
-				position.x + velocityX * 0.1f, position.y + velocityY * 0.1f));
+				position.x + velocityX * 0.1f * radius, 
+				position.y + velocityY * 0.1f * radius));
 		// collide with the level boundaries
 		if (collideWithLevel() != 0) {
 			// check if the ball itersects the paddle
-		} else if (col.intersects(this, Level.getInstance().getLocalPlayer()
+		} else if (col.intersects(this, Level.getInstance().getPlayerController()
 				.getPaddle())) {
 			// calculate collision parameters with the paddle
 			collideWithPaddle(caster, ballRay);
@@ -146,25 +147,34 @@ public class Ball extends Entity {
 	 *            the ball ray
 	 */
 	private void collideWithBricks(Collider col, RayCaster caster, Ray ballRay) {
-		ArrayList<Brick> copy = Level.getInstance().getBricksList();
+		ArrayList<Brick> pointer = Level.getInstance().getBricksList();
 		ArrayList<Brick> temp = new ArrayList<Brick>(Level.getInstance()
 				.getBricksList());
+		// check collision with each brick
 		for (Brick b : temp) {
+			// preselect the bricks
 			if (!b.wasHit && col.intersects(this, b)) {
-
+				// intersect the balls movement ray with brick collision
 				ArrayList<CollisionResult> results = caster.intersectRay(
 						ballRay, b.collision);
-				caster.validateCollisions(results);
-				caster.sortByDistance(results);
+				// if there are any colisions
 				if (!results.isEmpty()) {
+					// validate results
+					caster.validateCollisions(results);
+					// sort
+					caster.sortByDistance(results);
+					// get the nearest/first collision
 					CollisionResult first = results.get(0);
+					// change direction
 					if (first.collisionNormal.x == 0) {
 						velocityY *= -1.f;
 					} else if (first.collisionNormal.y == 0) {
 						velocityX *= -1.f;
 					}
+					// mark hit, so the player gets his/her points
 					b.setHit();
-					copy.remove(b);
+					// remove finally from the levels list
+					pointer.remove(b);
 					break;
 				}
 			}
@@ -180,7 +190,7 @@ public class Ball extends Entity {
 	 *            the ball ray
 	 */
 	private void collideWithPaddle(RayCaster caster, Ray ballRay) {
-		Paddle p = Level.getInstance().getLocalPlayer().getPaddle();
+		Paddle p = Level.getInstance().getPlayerController().getPaddle();
 		ArrayList<CollisionResult> results = caster.intersectRay(ballRay,
 				p.collision);
 		caster.validateCollisions(results);

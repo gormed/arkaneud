@@ -35,6 +35,7 @@ package com.arkaneud.data;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * The Class LevelData discribes the level with its bricks.
@@ -45,13 +46,13 @@ public class LevelData {
 	 * The Class BrickData defines the general data needed to create a brick.
 	 */
 	public class BrickData {
-		
+
 		/** The x,y position of the brick. */
-		public int x,y;
-		
+		public int x, y;
+
 		/** The color. */
 		public Color color;
-		
+
 		/**
 		 * Instantiates a new brick data.
 		 * 
@@ -69,25 +70,28 @@ public class LevelData {
 		}
 
 	}
-	
+
 	/** The brick data. */
 	private ArrayList<BrickData> brickData;
-	
+
 	/**
 	 * Instantiates a new level data.
 	 */
-	public LevelData(){
+	public LevelData() {
 		createDataset();
 	}
-	
+
 	/**
 	 * Creates the dataset for the level hardcoded (could be loaded via XML).
 	 */
 	private void createDataset() {
+		Random rand = new Random();
+
 		brickData = new ArrayList<LevelData.BrickData>();
 		for (float x = 1.0f; x < 6; x = x + 0.9f) {
 			for (float y = 19; y > 13; y = y - 0.9f) {
-				brickData.add(new BrickData(x * 60, y * 30, Color.GREEN));				
+				brickData.add(new BrickData(x * 60, y * 30, new Color(rand
+						.nextInt(255), rand.nextInt(255), rand.nextInt(255))));
 			}
 		}
 	}

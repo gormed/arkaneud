@@ -40,7 +40,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * The Class Paddle.
  */
-public class Paddle extends Entity {
+public class Paddle extends Collidable {
 	
 	/** The Constant PADDLE_HEIGHT. */
 	public static final int PADDLE_HEIGHT = 10;
@@ -76,9 +76,16 @@ public class Paddle extends Entity {
 	public void update(float gap) {
 		if (Level.getInstance().isOver())
 			return;
-
+		// chck if the player moved the paddle
 		if (moved) {
+			// add delta x to position if moved
 			position.x += (velocity * direction) * gap;
+			// check if paddle was moved out of level bounds
+			if (position.x < 0)
+				position.x = 0;
+			else if (position.x > Level.LEVEL_WIDTH-width)
+				position.x = Level.LEVEL_WIDTH-width;
+			// refresh the collision rect
 			createCollision();
 		} else
 			return;

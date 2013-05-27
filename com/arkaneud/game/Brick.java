@@ -28,7 +28,7 @@
  * File: Brick.java
  * Type: Brick
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 27.05.2013 - 01:24:29 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -42,7 +42,7 @@ import com.arkaneud.data.LevelData.BrickData;
 /**
  * The Class Brick represents a brick in simulation.
  */
-public class Brick extends Entity {
+public class Brick extends Collidable {
 
 	/** The Constant BRICK_HEIGHT. */
 	public static final int BRICK_HEIGHT = 20;
@@ -54,7 +54,7 @@ public class Brick extends Entity {
 	boolean wasHit = false;
 
 	/** The color. */
-	Color color;
+	private Color color;
 
 	int points = 1;
 
@@ -97,10 +97,7 @@ public class Brick extends Entity {
 	 */
 	@Override
 	public void update(float gap) {
-		if (Level.getInstance().isOver() || wasHit)
-			return;
-		// Ball b = Level.getInstance().getLocalPlayer().getBallsList().get(0);
-		// collide(b);
+		
 	}
 
 	/*
@@ -119,7 +116,7 @@ public class Brick extends Entity {
 	void setHit() {
 		if (wasHit)
 			return;
-		Level.getInstance().getLocalPlayer().addPoints(points);
+		Level.getInstance().getPlayerController().addPoints(points);
 		wasHit = true;
 	}
 
@@ -130,6 +127,15 @@ public class Brick extends Entity {
 	 */
 	public boolean wasHit() {
 		return wasHit;
+	}
+
+	/**
+	 * Gets the color.
+	 * 
+	 * @return the color
+	 */
+	public Color getColor() {
+		return color;
 	}
 
 }

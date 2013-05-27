@@ -21,6 +21,16 @@ public class HighscorePanel extends Panel {
 	
 	public HighscorePanel(final GameWindow window) {
 		this.window = window;
+		refresh();
+	}
+	
+	public void removeHighscore() {
+		window.remove(this);
+	}
+
+	public void refresh() {
+		removeAll();
+		validate();
 		ArrayList<HighscoreItem> list = highscore.getList();
 		Collections.reverse(list);
 		int items = list.size();
@@ -40,9 +50,6 @@ public class HighscorePanel extends Panel {
 			JLabel l = new JLabel( (i+1) + ")   " + item.getName() + " - " + item.getPoints());
 			add(l, i, 0);
 		}
-	}
-	
-	public void removeHighscore() {
-		window.remove(this);
+		validate();
 	}
 }
