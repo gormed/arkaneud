@@ -28,7 +28,7 @@
  * File: Level.java
  * Type: Level
  *
- * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
+ * Documentation created: 03.06.2013 - 10:35:00 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -68,6 +68,9 @@ public class Level extends Observable implements Updateable {
 	/** The local player. */
 	private Controller playerController;
 
+	/** The brick count. */
+	private int brickCount;
+
 	/**
 	 * Instantiates a new level.
 	 */
@@ -99,6 +102,7 @@ public class Level extends Observable implements Updateable {
 		isOver = false;
 		levelData = data;
 		bricksList = getBricksFromData();
+		brickCount = bricksList.size();
 		/*
 		 * This code works only on windows/not with the openJDK for linux
 		 * com.sun.security.auth.module.NTSystem NTSystem = new
@@ -145,7 +149,7 @@ public class Level extends Observable implements Updateable {
 	 * @return the bricks list
 	 */
 	public ArrayList<Brick> getBricksList() {
-		return new ArrayList<Brick>(bricksList);
+		return bricksList;
 	}
 
 	/*
@@ -158,14 +162,21 @@ public class Level extends Observable implements Updateable {
 		// update the players controller
 		playerController.updateObservers(gap);
 		// check for game-end
-		if (playerController.hasLost() || playerController.hasWon()) {
-			// signal the game is over
-			isOver = true;
-		}
+		checkGameEnd();
 		// update all bricks. this is actually unused, but can be used for
 		// animation purposes
 		for (Brick b : bricksList) {
 			b.updateObservers(gap);
+		}
+	}
+
+	/**
+	 * Check if game ends.
+	 */
+	private void checkGameEnd() {
+		if (playerController.hasLost() || playerController.hasWon()) {
+			// signal the game is over
+			isOver = true;
 		}
 	}
 
@@ -189,7 +200,7 @@ public class Level extends Observable implements Updateable {
 	 * @return the remaining bricks
 	 */
 	public int getRemainingBricks() {
-		return bricksList.size();
+		return brickCount;
 	}
 
 	/**
@@ -208,6 +219,11 @@ public class Level extends Observable implements Updateable {
 	 */
 	public Controller getPlayerController() {
 		return playerController;
+	}
+
+	public void removeBrick() {
+		if (brickCount > 0)
+			brickCount--;
 	}
 
 }

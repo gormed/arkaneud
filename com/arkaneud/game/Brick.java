@@ -116,6 +116,7 @@ public class Brick extends Collidable {
 	void setHit() {
 		if (wasHit)
 			return;
+		Level.getInstance().removeBrick();
 		Level.getInstance().getPlayerController().addPoints(points);
 		wasHit = true;
 	}

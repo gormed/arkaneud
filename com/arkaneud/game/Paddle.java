@@ -81,10 +81,10 @@ public class Paddle extends Collidable {
 			// add delta x to position if moved
 			position.x += (velocity * direction) * gap;
 			// check if paddle was moved out of level bounds
-			if (position.x < 0)
-				position.x = 0;
-			else if (position.x > Level.LEVEL_WIDTH-width)
-				position.x = Level.LEVEL_WIDTH-width;
+			if (position.x - width*0.5f < 0)
+				position.x = width*0.5f;
+			else if (position.x > Level.LEVEL_WIDTH-width*0.5f)
+				position.x = Level.LEVEL_WIDTH-width*0.5f;
 			// refresh the collision rect
 			createCollision();
 		} else

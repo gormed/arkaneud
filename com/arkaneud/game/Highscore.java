@@ -105,7 +105,7 @@ public class Highscore {
 		
 		HighscoreItem it = new HighscoreItem(name, points);
 		if (highscoreList.size() > 0) {
-			if (highscoreList.get(highscoreList.size()-1).compareTo(it) < 0) {
+			if (highscoreList.get(0).compareTo(it) < 0) {
 				highscoreList.add(it);
 				Collections.sort(highscoreList);
 				return true;

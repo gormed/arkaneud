@@ -116,8 +116,8 @@ public class Ball extends Collidable {
 		RayCaster caster = RayCaster.getInstance();
 		// create the balls movement ray from its velocity and current position
 		Ray ballRay = new Ray(position, new Point2D.Float(
-				position.x + velocityX * 0.1f * radius, 
-				position.y + velocityY * 0.1f * radius));
+				position.x + velocityX * 0.25f * radius, 
+				position.y + velocityY * 0.25f * radius));
 		// collide with the level boundaries
 		if (collideWithLevel() != 0) {
 			// check if the ball itersects the paddle
@@ -157,10 +157,10 @@ public class Ball extends Collidable {
 				// intersect the balls movement ray with brick collision
 				ArrayList<CollisionResult> results = caster.intersectRay(
 						ballRay, b.collision);
+				// validate results
+				caster.validateCollisions(results);
 				// if there are any colisions
 				if (!results.isEmpty()) {
-					// validate results
-					caster.validateCollisions(results);
 					// sort
 					caster.sortByDistance(results);
 					// get the nearest/first collision
@@ -173,8 +173,6 @@ public class Ball extends Collidable {
 					}
 					// mark hit, so the player gets his/her points
 					b.setHit();
-					// remove finally from the levels list
-					pointer.remove(b);
 					break;
 				}
 			}
@@ -213,23 +211,23 @@ public class Ball extends Collidable {
 	 * @return the int
 	 */
 	private int collideWithLevel() {
-		int sth = 0;
+		int collides = 0;
 		float x, y;
 		// we need to check if the ball will collide in the future so we travel
 		// some amount of time in the future to check taht
-		x = position.x + velocityX * 0.01f;
-		y = position.y + velocityY * 0.01f;
+		x = position.x + velocityX * 0.015f;
+		y = position.y + velocityY * 0.015f;
 		// check for left and right
 		if (x - radius < 0 || x + radius > Level.LEVEL_WIDTH) {
 			velocityX *= -1f;
-			sth = 1;
+			collides = 1;
 		}
 		// check for top
 		else if (y + radius > Level.LEVEL_HEIGHT) {
 			velocityY *= -1f;
-			sth = 1;
+			collides = 1;
 		}
-		return sth;
+		return collides;
 	}
 
 	/**

@@ -15,7 +15,7 @@ public class MenuPanel extends Panel {
 
 	public MenuPanel(final GameWindow window) {
 		this.window = window;
-		setLayout(new GridLayout(3, 1));
+		setLayout(new GridLayout(4, 1));
 		
 		JButton startGame = new JButton("Start Game");
 		startGame.addActionListener(new ActionListener() {
@@ -39,6 +39,14 @@ public class MenuPanel extends Panel {
 			}
 		});
 		
+		JButton settings = new JButton("Settings");
+		settings.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
 		JButton exitGame = new JButton("Exit Game");
 		exitGame.addActionListener(new ActionListener() {
 			
@@ -48,8 +56,8 @@ public class MenuPanel extends Panel {
 				window.exitGame();
 			}
 		});
-		
-		add(exitGame, 2,0);
+		add(exitGame, 3,0);
+		add(settings, 2,0);
 		add(showHS, 1,0);
 		add(startGame, 0,0);
 	}
