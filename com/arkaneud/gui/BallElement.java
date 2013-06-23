@@ -42,7 +42,7 @@ import com.arkaneud.game.*;
 /**
  * The Class BallElement represents a ball in the level for displaying.
  */
-public class BallElement extends LevelElement {
+public class BallElement extends GUIElement {
 
 	/** The radius of the drawn ball. */
 	int radius = 0;
@@ -62,9 +62,9 @@ public class BallElement extends LevelElement {
 	public void draw(Graphics g) {
 		if (isVisible()) {
 			g.setColor(Color.ORANGE);
-			g.fillOval(x - radius, y - radius, width, height);
+			g.fillOval(x, y, width, height);
 			g.setColor(Color.BLACK);
-			g.drawOval(x - radius, y - radius, width, height);
+			g.drawOval(x, y, width, height);
 		}
 	}
 

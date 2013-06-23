@@ -42,7 +42,7 @@ import com.arkaneud.data.LevelData.BrickData;
 /**
  * The Class Brick represents a brick in simulation.
  */
-public class Brick extends Collidable {
+public class Brick extends StaticCollidable {
 
 	/** The Constant BRICK_HEIGHT. */
 	public static final int BRICK_HEIGHT = 20;
@@ -107,7 +107,8 @@ public class Brick extends Collidable {
 	 */
 	@Override
 	public void createCollision() {
-		collision = new Rectangle2D.Float(position.x, position.y, width, height);
+		collision = new Rectangle2D.Float(position.x - width / 2, position.y
+				- height / 2, width, height);
 	}
 
 	/**
@@ -139,4 +140,9 @@ public class Brick extends Collidable {
 		return color;
 	}
 
+	@Override
+	public Rectangle2D getCollision() {
+		// TODO Auto-generated method stub
+		return super.getCollision();
+	}
 }

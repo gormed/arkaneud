@@ -42,7 +42,7 @@ import com.arkaneud.game.Paddle;
 /**
  * The Class PaddleElement represents the players paddle.
  */
-public class PaddleElement extends LevelElement {
+public class PaddleElement extends GUIElement {
 
 	/**
 	 * Instantiates a new paddle element.
@@ -58,7 +58,8 @@ public class PaddleElement extends LevelElement {
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
-		g.fill3DRect(x - width / 2, y - height / 2, width, height, true);
+		g.fill3DRect(x, y, width, height, true);
+
 		// g.drawRect(x - width / 2, y - height / 2, width, height);
 	}
 

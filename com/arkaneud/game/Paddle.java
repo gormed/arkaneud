@@ -40,11 +40,11 @@ import java.awt.geom.Rectangle2D;
 /**
  * The Class Paddle.
  */
-public class Paddle extends Collidable {
-	
+public class Paddle extends StaticCollidable {
+
 	/** The Constant PADDLE_HEIGHT. */
 	public static final int PADDLE_HEIGHT = 10;
-	
+
 	/** The Constant PADDLE_WIDTH. */
 	public static final int PADDLE_WIDTH = 65;
 
@@ -55,8 +55,8 @@ public class Paddle extends Collidable {
 	int direction = 0;
 
 	/** The velocity. */
-	float velocity = 500f;
-	
+	float velocity = 300f;
+
 	/**
 	 * Instantiates a new paddle.
 	 */
@@ -81,17 +81,17 @@ public class Paddle extends Collidable {
 			// add delta x to position if moved
 			position.x += (velocity * direction) * gap;
 			// check if paddle was moved out of level bounds
-			if (position.x - width*0.5f < 0)
-				position.x = width*0.5f;
-			else if (position.x > Level.LEVEL_WIDTH-width*0.5f)
-				position.x = Level.LEVEL_WIDTH-width*0.5f;
+			if (position.x - width * 0.5f < 0)
+				position.x = width * 0.5f;
+			else if (position.x > Level.LEVEL_WIDTH - width * 0.5f)
+				position.x = Level.LEVEL_WIDTH - width * 0.5f;
 			// refresh the collision rect
 			createCollision();
 		} else
 			return;
-		
-//		Ball b = Level.getInstance().getLocalPlayer().getBallsList().get(0);
-//		b.createCollision();
+
+		// Ball b = Level.getInstance().getLocalPlayer().getBallsList().get(0);
+		// b.createCollision();
 	}
 
 	/**
@@ -115,15 +115,16 @@ public class Paddle extends Collidable {
 		direction = 0;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.arkaneud.game.Entity#createCollision()
 	 */
 	@Override
 	public void createCollision() {
 
-		collision = new Rectangle2D.Float(position.x, position.y, width,
-				height);
+		collision = new Rectangle2D.Float(position.x - width / 2, position.y
+				- height / 2, width, height);
 	}
-
 
 }

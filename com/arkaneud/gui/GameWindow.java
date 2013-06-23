@@ -97,6 +97,8 @@ public class GameWindow extends JFrame {
 	/** The Highscore display panel */
 	private HighscorePanel highscore;
 
+	private SettingsPanel settings;
+
 	/** The game buffer. */
 	private GameBuffer gameBuffer;
 
@@ -128,9 +130,19 @@ public class GameWindow extends JFrame {
 		startGameThread();
 	}
 
+	public void showMenu() {
+		add(menu);
+		validate();
+	}
+
 	public void showHighscore() {
 		highscore.refresh();
 		add(highscore);
+		validate();
+	}
+
+	public void showSettings() {
+		add(settings);
 		validate();
 	}
 
@@ -214,13 +226,8 @@ public class GameWindow extends JFrame {
 		addWindowListener(windowListener = new GameWindowListener());
 		menu = new MenuPanel(this);
 		highscore = new HighscorePanel(this);
-
+		settings = new SettingsPanel(this);
 		showMenu();
-	}
-
-	public void showMenu() {
-		add(menu);
-		validate();
 	}
 
 	/**
@@ -415,6 +422,7 @@ public class GameWindow extends JFrame {
 				right = false;
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				exit = true;
+				System.exit(0);
 			}
 		}
 	}
@@ -447,8 +455,7 @@ public class GameWindow extends JFrame {
 		public void windowClosing(WindowEvent e) {
 			if (updateThread != null && updateThread.isAlive())
 				exit = true;
-			else
-				System.exit(0);
+			System.exit(0);
 		}
 
 		/*

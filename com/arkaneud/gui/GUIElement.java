@@ -60,6 +60,12 @@ public abstract class GUIElement implements Observer {
 	/** The x and y coordinate on the java awt surface. */
 	int x, y;
 
+	/** The width. */
+	int width;
+
+	/** The height. */
+	int height;
+	
 	/** The visiblity flag. */
 	boolean isVisible;
 

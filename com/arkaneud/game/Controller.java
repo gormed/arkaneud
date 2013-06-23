@@ -114,7 +114,6 @@ public class Controller extends Observable implements Updateable {
 			// update the current ball
 			ballsList.get(0).updateObservers(gap);
 		}
-
 	}
 
 	/*

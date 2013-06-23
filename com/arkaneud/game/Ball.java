@@ -35,14 +35,13 @@ package com.arkaneud.game;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Float;
 import java.util.ArrayList;
-import com.arkaneud.game.Collider.RayCaster;
-import com.arkaneud.game.Collider.RayCaster.CollisionResult;
 
 /**
  * The Class Ball defines the simulated ball.
  */
-public class Ball extends Collidable {
+public class Ball extends DynamicCollidable {
 
 	/** The Constant BALL_RADIUS. */
 	public static final int BALL_RADIUS = 6;
@@ -53,9 +52,6 @@ public class Ball extends Collidable {
 	/** The flag that defines if the ball is lost. */
 	private boolean isLost = false;
 
-	/** The velocity in x/y direction. */
-	private float velocityX, velocityY;
-
 	/** The radius. */
 	float radius = BALL_RADIUS;
 
@@ -65,8 +61,10 @@ public class Ball extends Collidable {
 	public Ball() {
 		position = new Point2D.Float(200, 200);
 		// starting velocity by random x and defined y
-		velocityX = (float) (200.0f * (Math.random() - 0.5));
-		velocityY = (float) (320.0f);
+		velocityX = (float) (300.0f * (Math.random() - 0.5));
+		velocityY = (float) (220.0f);
+		width = 2 * radius;
+		height = 2 * radius;
 		createCollision();
 	}
 
@@ -111,23 +109,18 @@ public class Ball extends Collidable {
 			setLost();
 			return;
 		}
-		// get instaces of collider and raycaster
-		Collider col = Collider.getInstance();
-		RayCaster caster = RayCaster.getInstance();
-		// create the balls movement ray from its velocity and current position
-		Ray ballRay = new Ray(position, new Point2D.Float(
-				position.x + velocityX * 0.25f * radius, 
-				position.y + velocityY * 0.25f * radius));
-		// collide with the level boundaries
-		if (collideWithLevel() != 0) {
+		// create collision rect that is 10 frames in the future to get
+		// collisions before they really happen
+		Rectangle2D.Float pre = new Rectangle2D.Float(collision.x + velocityX
+				* gap * 10, collision.y + velocityY * gap * 10,
+				collision.width, collision.height);
+
+		if (collideWithLevel(gap)) {
+			// collide with the level boundaries
+		} else if (collideWithPaddle(pre)) {
 			// check if the ball itersects the paddle
-		} else if (col.intersects(this, Level.getInstance().getPlayerController()
-				.getPaddle())) {
-			// calculate collision parameters with the paddle
-			collideWithPaddle(caster, ballRay);
-		} else if (true) {
+		} else if (collideWithBricks(pre)) {
 			// checks for each brick if they collide with the ball
-			collideWithBricks(col, caster, ballRay);
 		}
 		// apply the new velocity (set in one of the methods before)
 		position.x += velocityX * gap;
@@ -139,6 +132,8 @@ public class Ball extends Collidable {
 	/**
 	 * Collide with all bricks.
 	 * 
+	 * @param pre
+	 * 
 	 * @param col
 	 *            the col
 	 * @param caster
@@ -146,63 +141,39 @@ public class Ball extends Collidable {
 	 * @param ballRay
 	 *            the ball ray
 	 */
-	private void collideWithBricks(Collider col, RayCaster caster, Ray ballRay) {
-		ArrayList<Brick> pointer = Level.getInstance().getBricksList();
+	private boolean collideWithBricks(Rectangle2D.Float pre) {
 		ArrayList<Brick> temp = new ArrayList<Brick>(Level.getInstance()
 				.getBricksList());
 		// check collision with each brick
 		for (Brick b : temp) {
 			// preselect the bricks
-			if (!b.wasHit && col.intersects(this, b)) {
-				// intersect the balls movement ray with brick collision
-				ArrayList<CollisionResult> results = caster.intersectRay(
-						ballRay, b.collision);
-				// validate results
-				caster.validateCollisions(results);
-				// if there are any colisions
-				if (!results.isEmpty()) {
-					// sort
-					caster.sortByDistance(results);
-					// get the nearest/first collision
-					CollisionResult first = results.get(0);
-					// change direction
-					if (first.collisionNormal.x == 0) {
-						velocityY *= -1.f;
-					} else if (first.collisionNormal.y == 0) {
-						velocityX *= -1.f;
-					}
-					// mark hit, so the player gets his/her points
+			if (!b.wasHit && pre.intersects(b.getCollision())) {
+				if (collide(b)) {
 					b.setHit();
-					break;
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 
 	/**
 	 * Collide with paddle.
+	 * 
+	 * @param pre
 	 * 
 	 * @param caster
 	 *            the caster
 	 * @param ballRay
 	 *            the ball ray
 	 */
-	private void collideWithPaddle(RayCaster caster, Ray ballRay) {
+	private boolean collideWithPaddle(Float pre) {
 		Paddle p = Level.getInstance().getPlayerController().getPaddle();
-		ArrayList<CollisionResult> results = caster.intersectRay(ballRay,
-				p.collision);
-		caster.validateCollisions(results);
-		caster.sortByDistance(results);
-		if (!results.isEmpty()) {
-			CollisionResult first = results.get(0);
-
-			if (first.collisionNormal.x == 0) {
-				velocityY *= -1.f;
-			} else if (first.collisionNormal.y == 0) {
-				velocityX += (p.velocity * p.direction) * 0.1f;
-				velocityX *= -1.f;
-			}
+		if (pre.intersects(p.getCollision())) {
+			if (collide(p))
+				return true;
 		}
+		return false;
 	}
 
 	/**
@@ -210,24 +181,23 @@ public class Ball extends Collidable {
 	 * 
 	 * @return the int
 	 */
-	private int collideWithLevel() {
-		int collides = 0;
+	private boolean collideWithLevel(float gap) {
 		float x, y;
 		// we need to check if the ball will collide in the future so we travel
 		// some amount of time in the future to check taht
-		x = position.x + velocityX * 0.015f;
-		y = position.y + velocityY * 0.015f;
+		x = collision.x + velocityX * gap * 10;
+		y = collision.y + velocityY * gap * 10;
 		// check for left and right
-		if (x - radius < 0 || x + radius > Level.LEVEL_WIDTH) {
+		if (x <= 0 || x + width >= Level.LEVEL_WIDTH) {
 			velocityX *= -1f;
-			collides = 1;
+			return true;
 		}
 		// check for top
-		else if (y + radius > Level.LEVEL_HEIGHT) {
+		else if (y - radius >= Level.LEVEL_HEIGHT) {
 			velocityY *= -1f;
-			collides = 1;
+			return true;
 		}
-		return collides;
+		return false;
 	}
 
 	/**
@@ -247,7 +217,8 @@ public class Ball extends Collidable {
 	 */
 	@Override
 	public void createCollision() {
-		collision = new Rectangle2D.Float(position.x, position.y, width, height);
+		collision = new Rectangle2D.Float(position.x - radius, position.y
+				- radius, width, height);
 	}
 
 	/**
@@ -258,5 +229,4 @@ public class Ball extends Collidable {
 	public int getRadius() {
 		return (int) radius;
 	}
-
 }

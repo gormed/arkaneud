@@ -77,18 +77,6 @@ public abstract class Collidable extends Observable implements Updateable {
 		return collision;
 	}
 
-	/**
-	 * Sets the position of the Collidable. Position of Collidables are always the
-	 * center of it.
-	 * 
-	 * @param x
-	 *            the x
-	 * @param y
-	 *            the y
-	 */
-	public void setPosition(float x, float y) {
-		position.setLocation(x, y);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -97,9 +85,9 @@ public abstract class Collidable extends Observable implements Updateable {
 	 */
 	@Override
 	public void updateObservers(float gap) {
-		update(gap);
-		setChanged();
-		notifyObservers(gap);
+		update(gap); // updates the object
+		setChanged(); // sets the observable as changed
+		notifyObservers(gap); // now all observers are informed
 	}
 
 	/*
@@ -117,7 +105,7 @@ public abstract class Collidable extends Observable implements Updateable {
 	 * @return the x pos
 	 */
 	public float getXPos() {
-		return position.x;
+		return (float) collision.x;
 	}
 
 	/**
@@ -129,7 +117,7 @@ public abstract class Collidable extends Observable implements Updateable {
 	 * @return the y pos
 	 */
 	public float getYPos() {
-		return Level.LEVEL_HEIGHT - position.y;
+		return Level.LEVEL_HEIGHT - collision.y;
 	}
 
 	/**
@@ -138,7 +126,7 @@ public abstract class Collidable extends Observable implements Updateable {
 	 * @return the width
 	 */
 	public float getWidth() {
-		return width;
+		return collision.width;
 	}
 
 	/**
@@ -147,7 +135,7 @@ public abstract class Collidable extends Observable implements Updateable {
 	 * @return the height
 	 */
 	public float getHeight() {
-		return height;
+		return collision.height;
 	}
 
 }

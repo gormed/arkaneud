@@ -41,6 +41,10 @@ import java.awt.Panel;
 /**
  * The Class DoubleBuffer is a Java awt Panel with ability to draw double
  * buffered content.
+ * 
+ * Source: http://www.codeproject.com/Articles/2136/Double-buffer-in-standard-Java-AWT
+ * by Zizilamoroso
+ * 
  */
 class DoubleBuffer extends Panel {
 
