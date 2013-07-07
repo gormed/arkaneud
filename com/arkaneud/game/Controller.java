@@ -28,7 +28,11 @@
  * File: Controller.java
  * Type: Controller
  *
+<<<<<<< HEAD
  * Documentation created: 07.07.2013 - 23:05:56 by Hans Ferchland
+=======
+ * Documentation created: 07.07.2013 - 21:30:12 by Hans Ferchland
+>>>>>>> 54d40b6b1110d76ca4a0abd106cb99af15f07e53
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
