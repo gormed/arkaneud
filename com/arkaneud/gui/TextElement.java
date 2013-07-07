@@ -28,7 +28,7 @@
  * File: TextElement.java
  * Type: TextElement
  *
- * Documentation created: 18.03.2013 - 14:05:12 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:14 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;

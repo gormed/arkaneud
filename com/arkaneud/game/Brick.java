@@ -28,7 +28,7 @@
  * File: Brick.java
  * Type: Brick
  *
- * Documentation created: 27.05.2013 - 01:24:29 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:14 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -56,6 +56,7 @@ public class Brick extends StaticCollidable {
 	/** The color. */
 	private Color color;
 
+	/** The points. */
 	int points = 1;
 
 	/**
@@ -140,6 +141,9 @@ public class Brick extends StaticCollidable {
 		return color;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.arkaneud.game.Collidable#getCollision()
+	 */
 	@Override
 	public Rectangle2D getCollision() {
 		// TODO Auto-generated method stub

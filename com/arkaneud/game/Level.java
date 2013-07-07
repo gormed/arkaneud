@@ -28,7 +28,7 @@
  * File: Level.java
  * Type: Level
  *
- * Documentation created: 03.06.2013 - 10:35:00 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:12 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -95,7 +95,7 @@ public class Level extends Observable implements Updateable {
 	 * @param data
 	 *            the data
 	 */
-	public void initialize(LevelData data, String playerName) {
+	public void initialize(LevelData data) {
 		if (isInistialized)
 			return;
 
@@ -109,7 +109,7 @@ public class Level extends Observable implements Updateable {
 		 * com.sun.security.auth.module.NTSystem(); localPlayer = new
 		 * Player(System.getProperty(NTSystem.getName()), this);
 		 */
-		playerController = new Controller(playerName);
+		playerController = new Controller();
 
 		isInistialized = true;
 	}
@@ -221,6 +221,9 @@ public class Level extends Observable implements Updateable {
 		return playerController;
 	}
 
+	/**
+	 * Removes the brick.
+	 */
 	public void removeBrick() {
 		if (brickCount > 0)
 			brickCount--;

@@ -28,7 +28,7 @@
  * File: Highscore.java
  * Type: Highscore
  *
- * Documentation created: 26.05.2013 - 14:48:31 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:12 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;

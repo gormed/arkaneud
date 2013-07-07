@@ -28,7 +28,7 @@
  * File: GameWindow.java
  * Type: GameWindow
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 22:18:00 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -97,6 +97,7 @@ public class GameWindow extends JFrame {
 	/** The Highscore display panel */
 	private HighscorePanel highscore;
 
+	/** The settings. */
 	private SettingsPanel settings;
 
 	/** The game buffer. */
@@ -123,6 +124,9 @@ public class GameWindow extends JFrame {
 
 	}
 
+	/**
+	 * Start game.
+	 */
 	public void startGame() {
 		// load level, create ball and paddle
 		loadLevel();
@@ -130,22 +134,34 @@ public class GameWindow extends JFrame {
 		startGameThread();
 	}
 
+	/**
+	 * Show menu.
+	 */
 	public void showMenu() {
 		add(menu);
 		validate();
 	}
 
+	/**
+	 * Show highscore.
+	 */
 	public void showHighscore() {
 		highscore.refresh();
 		add(highscore);
 		validate();
 	}
 
+	/**
+	 * Show settings.
+	 */
 	public void showSettings() {
 		add(settings);
 		validate();
 	}
 
+	/**
+	 * Exit game.
+	 */
 	public void exitGame() {
 		Highscore.getInstance().save();
 		if (updateThread != null && updateThread.isAlive())
@@ -191,15 +207,7 @@ public class GameWindow extends JFrame {
 						}
 						updateTime = time;
 					} else {
-						if (Highscore.getInstance().insertItem(
-								level.getPlayerController().getName(),
-								level.getPlayerController().getPoints())) {
-							unloadLevel();
-							showHighscore();
-						} else {
-							unloadLevel();
-							showMenu();
-						}
+						checkHighscore();
 					}
 				}
 				// on leaving the loop, destroy everything
@@ -215,7 +223,28 @@ public class GameWindow extends JFrame {
 		// update thread
 		updateThread = new Thread(updater);
 	}
-
+	
+	/**
+	 * Checks if the user can contribute to the highscore.
+	 */
+	private void checkHighscore() {
+		// show a input dlg for the players name
+		String name = JOptionPane.showInputDialog("What is your name?");
+		if (name == null || name == "") {
+			name = "nameless";
+			level.getPlayerController().setName(name);
+		}
+		if (Highscore.getInstance().insertItem(
+				level.getPlayerController().getName(),
+				level.getPlayerController().getPoints())) {
+			unloadLevel();
+			showHighscore();
+		} else {
+			unloadLevel();
+			showMenu();
+		}
+	}
+	
 	/**
 	 * Initialize the game.
 	 */
@@ -235,18 +264,13 @@ public class GameWindow extends JFrame {
 	 */
 	private void loadLevel() {
 
-		// show a input dlg for the players name
-		String name = JOptionPane.showInputDialog("What is your name?");
-		if (name == null) {
-			name = "nameless";
-		}
 		// double buffer drawing logic
 		gameBuffer = new GameBuffer();
 		add(gameBuffer);
 
 		// create level from data
 		level = Level.getInstance();
-		level.initialize(new LevelData(), name);
+		level.initialize(new LevelData());
 
 		// add the listeners for user input and exit handling
 		gameBuffer.addKeyListener(gameKeyListener = new GameKeyListener());
@@ -311,6 +335,9 @@ public class GameWindow extends JFrame {
 		}
 	}
 
+	/**
+	 * Unload level.
+	 */
 	private void unloadLevel() {
 		exit = true;
 	}
@@ -377,10 +404,10 @@ public class GameWindow extends JFrame {
 	private class GameKeyListener implements KeyListener {
 
 		/** The left movement flag for the left arrow key. */
-		boolean left;
+		private boolean left;
 
 		/** The right movement flag for the right arrow key. */
-		boolean right;
+		private boolean right;
 
 		/*
 		 * (non-Javadoc)

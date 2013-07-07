@@ -28,7 +28,7 @@
  * File: DoubleBuffer.java
  * Type: DoubleBuffer
  *
- * Documentation created: 27.05.2013 - 01:52:52 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:13 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;

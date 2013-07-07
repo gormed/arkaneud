@@ -25,10 +25,10 @@
  * Email me for any questions: hans.ferchland[at]gmx.de
  *
  * Project: arkaneud
- * File: Player.java
- * Type: Player
+ * File: Controller.java
+ * Type: Controller
  *
- * Documentation created: 14.03.2013 - 14:27:14 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 23:05:56 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -69,9 +69,8 @@ public class Controller extends Observable implements Updateable {
 	 * @param name
 	 *            the name
 	 */
-	public Controller(String name) {
+	public Controller() {
 		paddle = new Paddle();
-		this.name = name;
 		// add three balls :)
 		ballsList.add(new Ball());
 		ballsList.add(new Ball());
@@ -165,6 +164,16 @@ public class Controller extends Observable implements Updateable {
 	 */
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * Sets the name of the player.
+	 * 
+	 * @param name
+	 *            the new name of the player
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
