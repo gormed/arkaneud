@@ -28,7 +28,7 @@
  * File: BallElement.java
  * Type: BallElement
  *
- * Documentation created: 10.03.2013 - 14:02:43 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:13 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;

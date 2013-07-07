@@ -28,7 +28,7 @@
  * File: Level.java
  * Type: Level
  *
- * Documentation created: 03.06.2013 - 10:35:00 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:12 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -221,6 +221,9 @@ public class Level extends Observable implements Updateable {
 		return playerController;
 	}
 
+	/**
+	 * Removes the brick.
+	 */
 	public void removeBrick() {
 		if (brickCount > 0)
 			brickCount--;

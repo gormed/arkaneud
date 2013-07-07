@@ -28,7 +28,7 @@
  * File: Paddle.java
  * Type: Paddle
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:14 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
@@ -36,7 +36,6 @@ package com.arkaneud.game;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Paddle.
  */

@@ -25,10 +25,10 @@
  * Email me for any questions: hans.ferchland[at]gmx.de
  *
  * Project: arkaneud
- * File: Player.java
- * Type: Player
+ * File: Controller.java
+ * Type: Controller
  *
- * Documentation created: 14.03.2013 - 14:27:14 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:12 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;

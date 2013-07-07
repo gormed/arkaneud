@@ -28,7 +28,7 @@
  * File: BrickElement.java
  * Type: BrickElement
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:13 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.gui;
@@ -44,6 +44,7 @@ import com.arkaneud.game.Brick;
  */
 public class BrickElement extends GUIElement {
 
+	/** The color. */
 	private Color color;
 
 	/**

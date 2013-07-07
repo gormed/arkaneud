@@ -28,7 +28,7 @@
  * File: Collidable.java
  * Type: Collidable
  *
- * Documentation created: 14.03.2013 - 13:47:09 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:13 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;

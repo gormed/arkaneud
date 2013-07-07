@@ -28,7 +28,7 @@
  * File: Updateable.java
  * Type: Updateable
  *
- * Documentation created: 10.03.2013 - 14:02:44 by Hans Ferchland
+ * Documentation created: 07.07.2013 - 21:30:14 by Hans Ferchland
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package com.arkaneud.game;
